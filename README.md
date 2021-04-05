@@ -8,7 +8,7 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 
 ## Current State of Application
 
-- Can upload and view images
+- Can upload and view images - copied from [this tutorial](https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask)
 - Uploaded images stored in the directory `uploads/`
 ![Application Screenshot](/Images/Application%20Screenshot.png)
 
