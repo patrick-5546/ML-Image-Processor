@@ -10,3 +10,4 @@ Images in this folder are downloaded from [Bing Images](https://www.bing.com/ima
 
 1. Navigate to this directory, `Backend/ImageTagger/`
 2. Run `python tagall.py` to add random tags to the images
+   ![tagall output](/Images/tagall%20output.png)
