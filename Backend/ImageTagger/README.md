@@ -1,6 +1,11 @@
 # Image Tagger
 
-Images in this folder are downloaded from [Bing Images](https://www.bing.com/images/) for demonstration purposes.
+The script `tagall.py` adds random tags to images. Added tags are visible through `Properties-Details` in Windows. 
+They are also included during indexing in both Windows and iOS, which means the images can be found by searching
+their tags. 
+
+Images in this folder are downloaded from [Bing Images](https://www.bing.com/images/) for demonstration
+purposes.
 
 ## Dependencies
 
