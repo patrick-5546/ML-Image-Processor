@@ -9,7 +9,7 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 ## Current State of Application
 
 - Can upload and view images
-- Uploaded images stored in `/uploads/`
+- Uploaded images stored in the directory `uploads/`
 ![Application Screenshot](/Images/Application%20Screenshot.png)
 
 ## Dependencies
