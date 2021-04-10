@@ -10,18 +10,19 @@ The script `tagall.py` tags images in the provided folder based on the output of
 
 ## How to Run
 
-1. Run `python Backend/tagall.py path/to/folder` to add random tags to the images
+1. Run `python Backend/tagall.py path/to/folder` to add tags to the images
 
 ## Sources
 
-- Images in this folder are downloaded from [Pixabay](https://https://pixabay.com/) for demonstration
+- Images in this folder are downloaded from [Pixabay](https://pixabay.com/) for demonstration
 purposes.
 
 ## Output
 
 - Some samples are included in `Backend/images_before` and `Backend/images_after`
 
-- Before running `tagall.py`
+- Before running `tagall.py`\
 ![before running tagall.py](/Images/tagall_before.jpg)
-- After running `tagall.py`
+
+- After running `tagall.py`\
 ![after running tagall.py](/Images/tagall_after.jpg)
