@@ -1,1 +1,0 @@
-This is to ensure the 'uploads' folder is included by Google App Engine
