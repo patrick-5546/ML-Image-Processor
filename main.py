@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
 import os
 import zipfile
+from Backend import tagger
 
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.png']
 app.config['UPLOAD_PATH'] = '/tmp'
-
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0 # this prevents browsers from caching the return files
 
 @app.errorhandler(400)
 def invalid_type(e):
@@ -33,6 +34,8 @@ def upload_files():
 @app.route('/download', methods=['GET'])
 def zip_and_download():
     path = app.config['UPLOAD_PATH']
+    tagger.tagFolder(path)
+
     ziph = zipfile.ZipFile('Photos.zip', 'w', zipfile.ZIP_DEFLATED)
     for root, dirs, files in os.walk(path):
         for file in files:
@@ -49,5 +52,7 @@ if __name__ == "__main__":
     old_files = [f for f in os.listdir('uploads')]
     for f in old_files:
         os.remove(os.path.join('uploads', f))
+
+    tagger.startImageTagger()
 
     app.run(host="127.0.0.1", port=8080, debug=True)
