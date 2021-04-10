@@ -1,22 +1,3 @@
-<!--<!doctype html>-->
-<!--<html>-->
-<!--    <head>-->
-<!--        <title>Basic File Uploader</title>-->
-<!--    </head>-->
-<!--    <body>-->
-<!--        <h1>Basic File Upload</h1>-->
-<!--        <form method="POST" action="" enctype="multipart/form-data">-->
-<!--            <p><input type="file" name="file"></p>-->
-<!--            <p><input type="submit" value="Submit"></p>-->
-<!--        </form>-->
-<!--        <hr>-->
-<!--        {% for file in files %}-->
-<!--            <img src="{{ url_for('upload', filename=file) }}" style="width: 480px">-->
-<!--        {% endfor %}-->
-<!--    </body>-->
-<!--</html>-->
-
-<!-- VERY NICE DROPPING IMAGES TO UPLOAD -->
 <html>
   <head>
     <title>Image Upload</title>
@@ -27,5 +8,8 @@
     <form action="{{ url_for('upload_files') }}" class="dropzone">
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+    <form action="/download" method="get">
+      <input type="submit" value="Download photos">
+    </form>
   </body>
 </html>
