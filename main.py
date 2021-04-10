@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.png']
 app.config['UPLOAD_PATH'] = '/tmp'
 
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0 # this prevents browsers from caching the return files
 
 @app.errorhandler(400)
 def invalid_type(e):
