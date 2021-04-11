@@ -9,8 +9,9 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 ## Current State of Application
 
 - Can upload and view images - copied from [this tutorial](https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask)
-- Uploaded images stored in the directory `uploads/`
-![Application Screenshot](/Images/Application%20Screenshot.png)
+- Uploaded images stored in the directory `uploads/' when run locally (will be stored in Google Cloud 'tmp/' directory when run on the Google App Engine')
+- Ability to download a copy of the uploaded images as a zip folder
+![Application Screenshot](/Images/Application Screenshot (Home).png)
 
 ## Dependencies
 
@@ -19,6 +20,8 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 
 ## How to Run
 
-1. Run `python main.py` to start application
+1. Run `python main.py` to start application and open http://127.0.0.1:8080/ on your browser
 2. Click on the box to select which images to upload, or drag them to the box
-![Select Images](/Images/Selecting%20Images.png)
+![Upload Images](/Images/Application Screenshot (Upload).png)
+3. Click 'Download photos' and select where to save the zip folder containing all the images
+![Download Images](/Images/Application Screenshot (Download).png)
