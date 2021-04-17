@@ -1,6 +1,6 @@
 # Image Tagger
 
-The script `tagger.py` contains methods to tag images based on the output of the pretrained YOLOv5s model and sklearn's facial recognition model. The added tags are included during indexing in both Windows and iOS, which means the images can be found by searching their tags. 
+The package contains methods to tag images based on the output of the pretrained YOLOv5s model and sklearn's facial recognition model. The added tags are included during indexing in both Windows and iOS, which means the images can be found by searching their tags. 
 
 ## Dependencies
 
@@ -12,8 +12,8 @@ The script `tagger.py` contains methods to tag images based on the output of the
 
 ```
 import tagger
-tagger.startImageTagger()
-tagger.tagFolder('path/to/image_folder', 'path/to/labeled_face_image_folder')
+tagger.initialize('path/to/image_folder', 'path/to/labeled_face_image_folder')
+tagger.tag()
 ```
 
 ## Sources

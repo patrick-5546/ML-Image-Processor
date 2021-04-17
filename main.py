@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
 import os
 import zipfile
-from tagger import tagger
+import tagger
 
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.png']
@@ -34,8 +34,7 @@ def upload_files():
 @app.route('/download', methods=['GET'])
 def zip_and_download():
     path = app.config['UPLOAD_PATH']
-    face_sample_folder = 'Backend/face_sample'
-    tagger.tagFolder(path, face_sample_folder)
+    tagger.tag()
 
     ziph = zipfile.ZipFile('Photos.zip', 'w', zipfile.ZIP_DEFLATED)
     for root, dirs, files in os.walk(path):
@@ -54,6 +53,6 @@ if __name__ == "__main__":
     for f in old_files:
         os.remove(os.path.join('uploads', f))
 
-    tagger.startImageTagger()
+    tagger.initialize(app.config['UPLOAD_PATH'], 'tagger/face_sample')
 
     app.run(host="127.0.0.1", port=8080, debug=True)
