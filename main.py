@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
 import os
 import zipfile
-from Backend import tagger
+from tagger import tagger
 
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.png']
