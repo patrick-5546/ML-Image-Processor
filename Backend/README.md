@@ -17,6 +17,8 @@ The script `tagall.py` tags images in the provided folder based on the output of
 - Images in this folder are downloaded from [Pixabay](https://pixabay.com/) for demonstration
 purposes.
 
+- `lfw-funneled-samples-20-classes-5`
+
 ## Output
 
 - Some samples are included in `Backend/images_before` and `Backend/images_after`

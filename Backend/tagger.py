@@ -5,29 +5,35 @@
 from collections.abc import Callable
 import os, pyexiv2, torch
 
-class MLModelMediator:
+from .object_detection import ObjectDetection
+from .face_recognition import identify
 
-    def __init__(self, model: str = 'yolov5s', minConfidence: float = 0.0):
-        self.__model = torch.hub.load('ultralytics/yolov5', model, pretrained=True, verbose=True)
-        self.__minConfidence = minConfidence
+def startImageTagger():
+    """
+    Initializes the image tagger
+    """
+    global __mediator, __tagger
+    __mediator = __MLModelMediator()
+    __tagger = __Tagger(['Xmp.dc.subject', 'Iptc.Application2.Keywords'], __mediator.getTags)
 
-    def __datasetBuilder(self, filepaths: list[str]) -> list[str]:
-        return list(filepaths)
+def tagFolder(folder: str, face_sample_folder: str):
+    """
+    Tags all images in the provided folder. Requires the tagger to be initialized.
 
-    def __predict(self, dataset) -> list[list[str]]:
-        output = self.__model(dataset) # NOTE: this modifies dataset
-        results = []
-        for pred in output.pred:
-            tags = set()
-            if pred != None:
-                for classId, conf in zip(pred[:, -1], pred[:, -2]):
-                    print(f'label: {output.names[int(classId)]} conf: {conf}')
-                    if conf >= self.__minConfidence:
-                        tags.add(output.names[int(classId)])
-            results.append(list(tags))
-        return results
+    Args:
+        folder (str): path of the image folder
+        face_sample_folder (str): path of the folder containing labeled face images
+    """
+    __tagger.tagImagesInFolder(folder, face_sample_folder)
+
+
+
+class __MLModelMediator:
+
+    def __init__(self):
+        self.__objectDection = ObjectDetection('yolov5s', 0.3)
     
-    def getTags(self, filepaths: list[str]) -> list[list[str]]:
+    def getTags(self, filepaths: list[str], face_sample_folder: str) -> list[list[str]]:
         """
         Get tags of the images using the ML model
 
@@ -40,18 +46,29 @@ class MLModelMediator:
 
         if len(filepaths) == 0:
             return []
-        dataset = self.__datasetBuilder(filepaths)
-        prediction = self.__predict(dataset)
+
+        prediction = self.__objectDection.detect(filepaths)
+
+        images_with_faces = []
+        for i, p in enumerate(prediction):
+            if 'person' in p:
+                images_with_faces.append(i)
+        
+        if face_sample_folder != '' and len(os.listdir(face_sample_folder)) > 0 and len(images_with_faces) > 0:
+            faces = identify(face_sample_folder, [filepaths[i] for i in images_with_faces])
+            for i, f in zip(images_with_faces, faces):
+                prediction[i].append(f)
+
         return prediction
 
-class Tagger:
+class __Tagger:
     
     def __init__(self, tagEntries: list[str], tagger: Callable[list[str], list[list[str]]]):
         self.__tagEntries = tagEntries
         self.__tagger = tagger
         self.__imageFileExt = ('.jpeg', '.jpg', '.png')
 
-    def __tagImage(self, filepath: str, newTags: list[str], verbose = True):
+    def __tagImage(self, filepath: str, newTags: list[str], append: bool = False):
         """
         Tag one image
 
@@ -60,8 +77,7 @@ class Tagger:
             newTags (list[str]): new tags to add to the image
         """
 
-        if verbose:
-            print(f'Image: {filepath}, adding tags: {newTags}')
+        print(f'Image: {filepath}, adding tags: {newTags}')
         img = pyexiv2.Image(filepath)
         read = {'Xmp': img.read_xmp, 'Iptc': img.read_iptc, 'Exif': img.read_exif}
         modify = {'Xmp': img.modify_xmp, 'Iptc': img.modify_iptc, 'Exif': img.modify_exif}
@@ -71,8 +87,9 @@ class Tagger:
             if entryType == 'Exif.Image.XPKeywords': 
                 raise "Exif.Image.XPKeywords is not supported"
             metadata = read[entryType]()
-            tags = (metadata.get(entry) or []) + newTags
-            metadata[entry] = tags
+            if append:
+                newTags.extend(metadata.get(entry) or [])
+            metadata[entry] = newTags
             modify[entryType](metadata)
     
     def __listImages(self, path: str) -> list[str]:
@@ -82,35 +99,17 @@ class Tagger:
         files = filter(lambda fn: fn.endswith(self.__imageFileExt), files)
         return [path + f for f in files]
 
-    def tagImagesInFolder(self, folder: str, verbose: bool = True):
+    def tagImagesInFolder(self, folder: str, face_sample_folder: str):
         """
         Tag all images in the provided folder based on the tagger
 
         Args:
             folder (str): paths of the folder
-            verbose (bool): verbose mode (default is True)
         """
         filepaths = self.__listImages(folder)
-        imageTags = self.__tagger(filepaths)
+        imageTags = self.__tagger(filepaths, face_sample_folder)
         count = len(filepaths)
-        if verbose:
-            print(f'Found {count} image{"s" * (count > 1)} in \"{folder}\"')
+        print(f'Found {count} image{"s" * (count > 1)} in \"{folder}\"')
 
         for filepath, tags in zip(filepaths, imageTags):
-            self.__tagImage(filepath, tags, verbose)
-
-def startImageTagger():
-    global __mediator, __tagger
-    __mediator = MLModelMediator('yolov5s', 0.3)
-    __tagger = Tagger(['Xmp.dc.subject', 'Iptc.Application2.Keywords'], __mediator.getTags)
-
-def tagFolder(folder: str, verbose: bool = True):
-    """
-    Tag all images in the provided folder based on the tagger
-
-    Args:
-        folder (str): paths of the folder
-        verbose (bool): verbose mode (default is True)
-    """
-    __tagger.tagImagesInFolder(folder, verbose)
-
+            self.__tagImage(filepath, tags, False)

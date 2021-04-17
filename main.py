@@ -34,7 +34,8 @@ def upload_files():
 @app.route('/download', methods=['GET'])
 def zip_and_download():
     path = app.config['UPLOAD_PATH']
-    tagger.tagFolder(path)
+    face_sample_folder = 'Backend/face_sample'
+    tagger.tagFolder(path, face_sample_folder)
 
     ziph = zipfile.ZipFile('Photos.zip', 'w', zipfile.ZIP_DEFLATED)
     for root, dirs, files in os.walk(path):
