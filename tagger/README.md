@@ -20,11 +20,18 @@ tagger.tag()
 
 #### Images
 
-- Images named `imageX.jpg` are downloaded from [Pixabay](https://pixabay.com/) for demonstration purposes.
+- Images in `face_sample` are extracted from the [Labeled Faces in the Wild](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_lfw_people.html) dataset.
+- Images in `images_before`:
+    - Images named `imageX.jpg` are downloaded from [Pixabay](https://pixabay.com/) for demonstration purposes.
+    - `Powell.jpg` by [David](https://www.flickr.com/photos/bootbearwdc/2311921844)
+    - `Schwarzenegger.jpg` by [Miljøstiftelsen ZERO](https://www.flickr.com/photos/zero_org/6376908843/)
+    - `GMA.jpg` by [philippinepresidency](https://www.flickr.com/photos/36884962@N05/3400496904/)
+    - `Agassi.jpg` by [Shinya Suzuki](https://www.flickr.com/photos/shinyasuzuki/6182777961/)
+    - `Toledo.jpg` by [San Francisco Foghorn](https://www.flickr.com/photos/sffoghorn/16533059473/)
+- Images in `images_after` are tagged by this application 
 
-- Face images are extracted from the [Labeled Faces in the Wild](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_lfw_people.html) dataset.
 
-#### Source Code
+#### Code
 
 - `face_recognition.py` is written based on `Face_Recognition.ipynb`
 
