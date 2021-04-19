@@ -2,19 +2,32 @@
 
 from os import listdir
 from os.path import join, isdir
-import numpy as np
 from sklearn.utils import Bunch
+from sklearn.externals._pilutil import imread, imresize, fromimage
+import numpy as np
 
-def load_test_images(image_paths, slice_=(slice(70, 195), slice(78, 172)), color=False, resize=0.5):
-    if len(image_paths) == 0:
-        raise ValueError("No image found")
+def build_train_dataset(train_folder: str):
+    train_dataset = _make_train_dataset(train_folder)
+    data = train_dataset.images
+    target = train_dataset.target
+    data = data.reshape((data.shape[0], data.shape[1] * data.shape[2]))
+    return data, target, train_dataset.target_names
 
-    faces = _load_imgs(image_paths, slice_, color, resize)
+def build_prediction_dataset(face_images, height, width):
+    n_faces = len(face_images)
+    if n_faces == 0:
+        raise ValueError("No image provided")
 
-    return faces
+    faces = np.zeros((n_faces, height, width), dtype=np.float32)
+    for i, img in enumerate(face_images):
+        face = np.asarray(fromimage(img), dtype=np.float32)
+        face = imresize(face / 255.0, (height, width))
+        faces[i, ...] = face.mean(axis=2)
+
+    return faces.reshape((n_faces, height * width))
 
 # Can experiment with changing slice and resize values
-def make_train_dataset(data_folder_path, slice_=(slice(70, 195), slice(78, 172)), color=False, resize=0.5, min_faces_per_person=0):
+def _make_train_dataset(data_folder_path, slice_=(slice(70, 195), slice(78, 172)), color=False, resize=0.5, min_faces_per_person=0):
     """Perform the actual data loading for the lfw people dataset
     This operation is meant to be cached by a joblib wrapper.
     """
@@ -48,7 +61,7 @@ def make_train_dataset(data_folder_path, slice_=(slice(70, 195), slice(78, 172))
     # k-means that make an IID assumption
 
     indices = np.arange(n_faces)
-    np.random.RandomState(42).shuffle(indices)
+    np.random.RandomState(42).shuffle(indices) # pylint: disable=no-member
     faces, target = faces[indices], target[indices]
     X = faces.reshape(len(faces), -1)
     return Bunch(data=X, images=faces, target=target, target_names=target_names)

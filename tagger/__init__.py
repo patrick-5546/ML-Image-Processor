@@ -6,9 +6,10 @@ based on the output of the pretrained YOLOv5s model.
 from collections.abc import Callable, Iterable
 import os, pyexiv2, torch
 
-from .object_detection import ObjectDetection
-from .face_recognition import identify
-from .image_tag import ImageTag
+from .object_detection import ObjectDetection # pylint: disable=import-error
+from .face_detection import cropFaces # pylint: disable=import-error
+from .face_recognition import FaceRecognition # pylint: disable=import-error
+from .image_tag import ImageTag # pylint: disable=import-error
 
 def initialize(workingDirectory: str, face_sample_folder: str):
     """
@@ -63,8 +64,9 @@ class __ImageHolder:
 class __MLModelMediator:
 
     def __init__(self, face_sample_folder: str = None):
-        self.__objectDection = ObjectDetection('yolov5s', 0.3)
+        self.__objectDetection = ObjectDetection('yolov5s', 0.3)
         self.__face_sample_folder = face_sample_folder
+        self.__face_recognition = FaceRecognition()
     
     def addTags(self, images: list[ImageTag]):
         """
@@ -76,19 +78,16 @@ class __MLModelMediator:
         if len(images) == 0:
             return []
             
-        prediction = self.__objectDection.detect([img.filepath for img in images])
-
-        images_with_faces = []
+        prediction = self.__objectDetection.detect([img.filepath for img in images])
         for i, p in enumerate(prediction):
             images[i].objectTags.update(p)
-            if images[i].containsFace():
-                images_with_faces.append(i)
-        
-        face_sample = self.__face_sample_folder
-        if face_sample is not None and len(os.listdir(face_sample)) > 0 and len(images_with_faces) > 0:
-            faces = identify(face_sample, [images[i].filepath for i in images_with_faces])
-            for i, f in zip(images_with_faces, faces):
-                images[i].nameTag = f
+
+        self.__face_recognition.train(self.__face_sample_folder)
+        for image in images:
+            faces, _ = cropFaces(image.filepath)
+            if len(faces) > 0:
+                names = self.__face_recognition.predict(faces)
+                image.nameTag = names[0]
 
 def tagImage(filepath: str, newTags: Iterable[str]):
     """

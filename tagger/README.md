@@ -6,6 +6,7 @@ The package contains methods to tag images based on the output of the pretrained
 
 - [pyexiv2](https://pypi.org/project/pyexiv2/)
 - [scikit-learn](https://pypi.org/project/scikit-learn/)
+- [facenet_pytorch](https://pypi.org/project/facenet-pytorch/)
 - [YOLOv5 dependencies](https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt)
 
 ## How to Run
