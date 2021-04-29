@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
 import os
 import zipfile
-import tagger
+import tagger, enhancement
 
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.png']
@@ -35,6 +35,7 @@ def upload_files():
 def zip_and_download():
     path = app.config['UPLOAD_PATH']
     tagger.tag()
+    enhancement.enhanceImagesIn(path)
 
     ziph = zipfile.ZipFile('Photos.zip', 'w', zipfile.ZIP_DEFLATED)
     for root, dirs, files in os.walk(path):

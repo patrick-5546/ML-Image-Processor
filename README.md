@@ -14,9 +14,18 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 ![Application Screenshot](/Images/Application%20Screenshot%20(Home).png)
 
 ## Dependencies
-
-- [python3](https://www.python.org/download/releases/3.0/)
-- [flask](https://flask.palletsprojects.com/en/1.1.x/installation/)
+- Basics
+    - [python3](https://www.python.org/download/releases/3.0/)
+    - [flask](https://flask.palletsprojects.com/en/1.1.x/installation/)
+    - [pyexiv2](https://pypi.org/project/pyexiv2/)
+- Object Detection
+    - [YOLOv5 dependencies](https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt)
+- Face Recognition
+    - [facenet_pytorch](https://pypi.org/project/facenet-pytorch/)
+    - [scikit-learn](https://pypi.org/project/scikit-learn/)
+- Low Light Enhancement
+    - [keras](https://pypi.org/project/keras/)
+    - [tensorflow](https://pypi.org/project/tensorflow/)
 
 ## How to Run
 

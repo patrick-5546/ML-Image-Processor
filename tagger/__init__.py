@@ -41,7 +41,6 @@ class __ImageHolder:
         self.__workingDirectory = workingDirectory
         self.__imageFileExt = ('.jpeg', '.jpg', '.png')
         self.images = dict()
-        self.scan()
 
     def scan(self):
         self.images = dict()

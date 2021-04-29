@@ -4,11 +4,17 @@ The package contains methods to tag images based on the output of the pretrained
 
 ## Dependencies
 
-- [pyexiv2](https://pypi.org/project/pyexiv2/)
-- [scikit-learn](https://pypi.org/project/scikit-learn/)
-- [facenet_pytorch](https://pypi.org/project/facenet-pytorch/)
-- [YOLOv5 dependencies](https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt)
-
+- Modifying Image Metadata
+    - [pyexiv2](https://pypi.org/project/pyexiv2/)
+- Object Detection
+    - [YOLOv5 dependencies](https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt)
+- Face Recognition
+    - [facenet_pytorch](https://pypi.org/project/facenet-pytorch/)
+    - [scikit-learn](https://pypi.org/project/scikit-learn/)
+- Low Light Enhancement
+    - [keras](https://pypi.org/project/keras/)
+    - [tensorflow](https://pypi.org/project/tensorflow/)
+    
 ## How to Run
 
 ```
