@@ -53,5 +53,6 @@ if __name__ == "__main__":
     os.mkdir('uploads')
 
     tagger.initialize(app.config['UPLOAD_PATH'], 'tagger/face_sample')
+    enhancement.init()
 
     app.run(host="127.0.0.1", port=8080, debug=True)

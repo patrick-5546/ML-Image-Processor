@@ -4,20 +4,18 @@ The ML model used in this package is constructed
 and trained based on the notebook 
 https://www.kaggle.com/basu369victor/low-light-image-enhancement-with-cnn 
 """
-import os, pathlib
+import os, pathlib, time
 import cv2 as cv
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 from keras.models import load_model
 
-__enhancer = None
 __width, __height = 500, 500
 
-def __init_enhancer():
+def init():
     global __enhancer
-    if __enhancer is None:
-        __enhancer = load_model("enhancement/saved_lle_model")
+    __enhancer = load_model("enhancement/saved_lle_model")
 
 def __loadImage(ImagePath: str):
     """
@@ -32,41 +30,49 @@ def __loadImage(ImagePath: str):
     """
     img = cv.imread(ImagePath)
     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-    img = cv.resize(img, (__width, __height))
-    return img.reshape(1, __width, __height, 3)
+    img = cv.resize(img, (__height, __width))
+    return img.reshape(1, __height, __width, 3)
 
-def enhance(ImagePath: str) -> Image:
+def __getEnhancedImage(img):
+    pred = __enhancer.predict(img)
+    return pred.reshape(__height, __width, 3).astype(np.uint8)
+
+def enhanceImage(img_path: str, save_path: str) -> Image:
     """
-    Run low light enhancement on the image.
+    Run low light enhancement on the image 
+    and save the enhanced image to save_path
 
     Args:
-        ImagePath (str): the image path
-        
-    Returns:
-        the enhance image
+        img_path (str): the image path
+        save_path (str): folder to save image
     """
-    __init_enhancer()
-    img_ori = __loadImage(ImagePath)
-    pred = __enhancer.predict(img_ori)
-    img_arr = pred.reshape(__width, __height, 3).astype(np.uint8)
-    return Image.fromarray(img_arr, 'RGB')
+    img_fn = os.path.basename(img_path)
+    img_ori = __loadImage(img_path)
+    img_arr = __getEnhancedImage(img_ori)
+    img_enhanced = Image.fromarray(img_arr, 'RGB')
+    img_enhanced.save(f"{save_path}/{img_fn}")
 
-def enhanceImagesIn(folder: str):
+def enhanceImagesIn(folder: str, max_brightness: float = 30.0):
     """
-    Run low light enhancement on all images in the given folder
+    Run low light enhancement on all dark images in the given folder
     and save enhanced images to folder + "enhanced/"
 
     Args:
         folder (str): folder 
+        max_brightness (float): skip images with brightness greater than this value
     """
-    __init_enhancer()
+    start = time.time()
     enhanced_folder = folder + "/enhanced/"
     pathlib.Path(enhanced_folder).mkdir(parents=True, exist_ok=True) 
     files = os.listdir(folder)
     files = filter(lambda fn: fn.endswith(('.jpeg', '.jpg', '.png')), files)
 
-    count = 0
     for fn in files:
-        count += 1
-        enhanced = enhance(f"{folder}/{fn}")
-        enhanced.save(f"{enhanced_folder}/{fn}.jpg")
+        img_ori = __loadImage(f"{folder}/{fn}")
+        if (img_ori.mean() > max_brightness):
+            continue
+        img_arr = __getEnhancedImage(img_ori)
+        img_enhanced = Image.fromarray(img_arr, 'RGB')
+        img_enhanced.save(f"{enhanced_folder}/{fn}")
+
+    print(f"enhanceImagesIn runtime: {time.time() - start} seconds")
