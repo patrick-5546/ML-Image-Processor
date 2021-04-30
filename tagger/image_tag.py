@@ -1,17 +1,45 @@
 from collections.abc import Callable, Iterable
 
 class ImageTag:
-    def __init__(self, filepath: str, objectTags: Iterable = set(), nameTag: str = None, userDefinedName: bool = False):
+    def __init__(self, filepath: str, objectTags: Iterable = set(), faceTags: Iterable = set()):
         self.filepath = filepath
-        self.objectTags = set(objectTags)
-        self.nameTag = nameTag
-        self.userDefinedName = userDefinedName
+        self.__objectTags = set(objectTags)
+        self.__faceTags = set(faceTags)
+        self.__excludeTags = set()
+        self.__addedUserTags = set()
+        self.__objectDetected = False
+        self.__faceRecognized = False
     
     def getAllTags(self):
-        tags = set(self.objectTags)
-        if self.nameTag is not None:
-            tags.add(self.nameTag)
-        return tags
+        tags = self.__objectTags.union(self.__faceTags, self.__addedUserTags)
+        return tags - self.__excludeTags
+    
+    def excludeTag(self, tag):
+        self.__excludeTags.add(tag)
+    
+    def addUserTag(self, tag):
+        self.__excludeTags.discard(tag)
+        self.__addedUserTags.add(tag)
+    
+    def setObjectTags(self, tags):
+        print(f"setting object tags: {tags}")
+        self.__objectTags = set(tags)
+        self.__objectDetected = True
 
-    def containsFace(self):
-        return (not self.userDefinedName) and ('person' in self.objectTags)
+    def clearObjectTags(self):
+        self.__objectTags = set()
+        self.__objectDetected = False
+    
+    def setFaceTags(self, tags):
+        self.__faceTags = set(tags)
+        self.__faceRecognized = True
+
+    def clearFaceTags(self):
+        self.__faceTags = set()
+        self.__faceRecognized = False
+    
+    def isObjectDetected(self):
+        return self.__objectDetected
+
+    def isFaceRecognized(self):
+        return self.__faceRecognized

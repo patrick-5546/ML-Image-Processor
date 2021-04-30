@@ -5,6 +5,7 @@ based on the output of the pretrained YOLOv5s model.
 
 from collections.abc import Callable, Iterable
 import os, pyexiv2, torch
+import time
 
 from .object_detection import ObjectDetection # pylint: disable=import-error
 from .face_detection import cropFaces # pylint: disable=import-error
@@ -27,9 +28,11 @@ def tag():
     """
     Tags all images in the image folder. Requires the tagger to be initialized.
     """
+    start = time.time()
     __holder.scan()
     __mediator.addTags(__holder.getImageList())
     __holder.saveTagsToFile()
+    print(f"tag() runtime: {time.time() - start} seconds")
 
 class __ImageHolder:
 
@@ -42,30 +45,57 @@ class __ImageHolder:
         self.__imageFileExt = ('.jpeg', '.jpg', '.png')
         self.images = dict()
 
+    def __addImage(self, filename):
+        path = self.__workingDirectory + filename
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"{path} does not exists")
+        if filename not in self.images:
+            self.images[filename] = ImageTag(path)
+
     def scan(self):
+        start = time.time()
         self.images = dict()
 
         files = os.listdir(self.__workingDirectory)
         files = filter(lambda fn: fn.endswith(self.__imageFileExt), files)
 
         for f in files:
-            self.images[f] = ImageTag(self.__workingDirectory + f)
+            self.__addImage(f)
+
         count = len(self.images)
         print(f'Found {count} image{"s" * (count > 1)} in \"{self.__workingDirectory}\"')
+        print(f"scan(self) runtime: {time.time() - start} seconds")
 
     def saveTagsToFile(self):
+        start = time.time()
         for image in self.images.values():
             tagImage(image.filepath, image.getAllTags())
+        print(f"saveTagsToFile(self) runtime: {time.time() - start} seconds")
     
     def getImageList(self):
         return list(self.images.values())
 
+    def excludeTag(self, filename, tag):
+        self.__addImage(filename)
+        self.images[filename].excludeTag(tag)
+    
+    def addTag(self, filename, tag):
+        self.__addImage(filename)
+        self.images[filename].addUserTag(tag)
+
+    def getTags(self, filename):
+        self.__addImage(filename)
+        imgTag = self.images[filename]
+        __mediator.addTags([imgTag])
+        return imgTag.getAllTags()
+    
 class __MLModelMediator:
 
     def __init__(self, face_sample_folder: str = None):
         self.__objectDetection = ObjectDetection('yolov5s', 0.3)
         self.__face_sample_folder = face_sample_folder
         self.__face_recognition = FaceRecognition()
+        self.__face_recognition.train(self.__face_sample_folder)
     
     def addTags(self, images: list[ImageTag]):
         """
@@ -74,19 +104,29 @@ class __MLModelMediator:
         Args:
             images (list[ImageTag]): images
         """
+        start = time.time()
         if len(images) == 0:
             return []
-            
-        prediction = self.__objectDetection.detect([img.filepath for img in images])
-        for i, p in enumerate(prediction):
-            images[i].objectTags.update(p)
+        
+        # Object Detection
+        obj_images = list(filter(lambda img: not img.isObjectDetected(), images))
+        obj_filepaths = [img.filepath for img in obj_images]
+        obj_pred = self.__objectDetection.detect(obj_filepaths)
+        for img, pred in zip(obj_images, obj_pred):
+            img.setObjectTags(pred)
 
-        self.__face_recognition.train(self.__face_sample_folder)
+        print(f"addTags Object Detection runtime: {time.time() - start} seconds")
+        start = time.time()
+
+        # Facial Recognition
         for image in images:
+            if image.isFaceRecognized():
+                continue
             faces, _ = cropFaces(image.filepath)
-            if len(faces) > 0:
-                names = self.__face_recognition.predict(faces)
-                image.nameTag = names[0]
+            names = self.__face_recognition.predict(faces)
+            image.setFaceTags(names)
+        
+        print(f"addTags Facial Recognition runtime: {time.time() - start} seconds")
 
 def tagImage(filepath: str, newTags: Iterable[str]):
     """

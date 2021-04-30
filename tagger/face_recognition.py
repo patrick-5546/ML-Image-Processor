@@ -22,13 +22,31 @@ class FaceRecognition:
         self.__clf = SVC()
         self.__clf.fit(train_pca, train_target)
 
-    def train(self, train_folder):
+    def train(self, train_folder: str):
+        """
+        Train a new model based on the provided dataset
+
+        Args:
+            train_folder (str): the folder containing the dataset
+        """
         data, target, names = build_train_dataset(train_folder)
         self.__build_pca(data)
         self.__build_svc(data, target)
         self.names = names
 
     def predict(self, faces):
+        """
+        Given a list of faces, predict their names.
+
+        Args:
+            faces (Image): the faces
+
+        Returns:
+            pred: predicted names
+        """
+        if len(faces) == 0:
+            return []
+
         size = self.__sample_size
         pred_data = build_prediction_dataset(faces, size[0], size[1])
         pred_pca = self.__pca.transform(pred_data)
