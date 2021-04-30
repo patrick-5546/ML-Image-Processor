@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
-import os
+import os, shutil
 import zipfile
 import tagger, enhancement
 
@@ -49,10 +49,8 @@ def zip_and_download():
 
 if __name__ == "__main__":
     app.config['UPLOAD_PATH'] = 'uploads'
-
-    old_files = [f for f in os.listdir('uploads')]
-    for f in old_files:
-        os.remove(os.path.join('uploads', f))
+    shutil.rmtree('uploads', FileNotFoundError)
+    os.mkdir('uploads')
 
     tagger.initialize(app.config['UPLOAD_PATH'], 'tagger/face_sample')
 
