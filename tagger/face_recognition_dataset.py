@@ -1,10 +1,13 @@
-# The blocks below were mostly copied from the sklearn code base (https://github.com/scikit-learn/scikit-learn/blob/95119c13a/sklearn/datasets/_lfw.py)
+# The blocks below were mostly copied from the sklearn code base
+# (https://github.com/scikit-learn/scikit-learn/blob/95119c13a/sklearn/datasets/_lfw.py)
 
 from os import listdir
 from os.path import join, isdir
+from PIL import Image
 from sklearn.utils import Bunch
-from sklearn.externals._pilutil import imread, imresize, fromimage
+from ._pilutil import imread, imresize, fromimage
 import numpy as np
+
 
 def build_train_dataset(train_folder: str):
     train_dataset = _make_train_dataset(train_folder)
@@ -13,7 +16,18 @@ def build_train_dataset(train_folder: str):
     data = data.reshape((data.shape[0], data.shape[1] * data.shape[2]))
     return data, target, train_dataset.target_names
 
+
 def build_prediction_dataset(face_images, height, width):
+    """
+
+    Args:
+        face_images (list[Image]):
+        height (int):
+        width (int):
+
+    Returns:
+        np.ndarray: numpy array with shape (num_images, height * width)
+    """
     n_faces = len(face_images)
     if n_faces == 0:
         raise ValueError("No image provided")
@@ -25,6 +39,7 @@ def build_prediction_dataset(face_images, height, width):
         faces[i, ...] = face.mean(axis=2)
 
     return faces.reshape((n_faces, height * width))
+
 
 # Can experiment with changing slice and resize values
 def _make_train_dataset(data_folder_path, slice_=(slice(70, 195), slice(78, 172)), color=False, resize=0.5, min_faces_per_person=0):
@@ -66,10 +81,9 @@ def _make_train_dataset(data_folder_path, slice_=(slice(70, 195), slice(78, 172)
     X = faces.reshape(len(faces), -1)
     return Bunch(data=X, images=faces, target=target, target_names=target_names)
 
+
 def _load_imgs(file_paths, slice_, color, resize):
     """Internally used to load images"""
-    # import PIL only when needed
-    from sklearn.externals._pilutil import imread, imresize
 
     # compute the portion of the images to load to respect the slice_ parameter
     # given by the caller

@@ -1,14 +1,12 @@
-import numpy as np
-from sklearn import metrics
 from sklearn.svm import SVC
 from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
+from .face_recognition_dataset import build_train_dataset, build_prediction_dataset
 
-from .face_recognition_dataset import build_train_dataset, build_prediction_dataset # pylint: disable=relative-beyond-top-level
 
 class FaceRecognition:
     def __init__(self):
-        self.__sample_size = (62, 47) # (height, width)
+        self.__sample_size = (62, 47)  # (height, width)
+        self.names = []
 
     def __build_pca(self, train_dataset):
         # from first past project, start with the top 150/855 = 17.5% of samples
@@ -16,13 +14,13 @@ class FaceRecognition:
         print(f"building pca, n_components = {n_components}")
         self.__pca = PCA(n_components=n_components, whiten=True)
         self.__pca.fit(train_dataset)
-    
+
     def __build_svc(self, train_dataset, train_target):
         train_pca = self.__pca.transform(train_dataset)
         self.__clf = SVC()
         self.__clf.fit(train_pca, train_target)
 
-    def train(self, train_folder: str):
+    def train(self, train_folder):
         """
         Train a new model based on the provided dataset
 
@@ -39,10 +37,10 @@ class FaceRecognition:
         Given a list of faces, predict their names.
 
         Args:
-            faces (Image): the faces
+            faces (list[Image]): the faces
 
         Returns:
-            pred: predicted names
+            list[str]: predicted names
         """
         if len(faces) == 0:
             return []

@@ -1,40 +1,39 @@
 """
-This python script tags images in the provided folder 
-based on the output of the pretrained YOLOv5s model.
+This python script tags images in the provided folder.
 """
 
-from collections.abc import Callable, Iterable
-import os, torch
 import time
+from .object_detection import ObjectDetection
+from .face_detection import crop_faces
+from .face_recognition import FaceRecognition
+from .image_tag import ImageLibrary, ImageTag
 
-from .object_detection import ObjectDetection # pylint: disable=import-error
-from .face_detection import cropFaces # pylint: disable=import-error
-from .face_recognition import FaceRecognition # pylint: disable=import-error
-from .image_tag import ImageLibrary, ImageTag # pylint: disable=import-error
 
-def initialize(workingDirectory: str, face_sample_folder: str):
+def initialize(working_dir, face_sample_folder):
     """
     Initializes the image tagger
 
     Args:
-        workingDirectory (str): path of the image folder
+        working_dir (str): path of the image folder
         face_sample_folder (str): path of the folder containing labeled face images
     """
     global __mediator, __library
     __mediator = __MLModelMediator(face_sample_folder)
-    __library = ImageLibrary(workingDirectory)
+    __library = ImageLibrary(working_dir)
 
-def tag():
+
+def tag_all_images():
     """
-    Tags all images in the image folder. Requires the tagger to be initialized.
+    Tags all images in the working directory. Requires the tagger to be initialized.
     """
     start = time.time()
     __library.scan()
-    __mediator.addTags(__library.getImageList())
-    __library.saveTagsToFile()
+    __mediator.add_tags(__library.get_all_items())
+    __library.save_tags()
     print(f"tag() runtime: {time.time() - start} seconds")
 
-def getTags(filename: str):
+
+def get_tags(filename):
     """
     Read tags of an image. Run object detection and facial recognition if necessary.
 
@@ -42,13 +41,14 @@ def getTags(filename: str):
         filename (str): name of the image file
 
     Returns:
-        tags: tags of the image
+        set[str]: tags of the image
     """
-    imgTag = __library.getItem(filename)
-    __mediator.addTags([imgTag])
-    return imgTag.getAllTags()
+    img_tag = __library.get_item(filename)
+    __mediator.add_tags([img_tag])
+    return img_tag.get_all_tags()
 
-def excludeTag(filename, tag):
+
+def exclude_tag(filename, tag):
     """
     Exclude a tag from an image. The excluded tag will no longer 
     appear unless it is explicitly added back to the image.
@@ -57,9 +57,10 @@ def excludeTag(filename, tag):
         filename (str): name of the image file
         tag (str): tag to exclude
     """
-    __library.getItem(filename).excludeTag(tag)
-    
-def addTag(filename, tag):
+    __library.get_item(filename).exclude_tag(tag)
+
+
+def add_tag(filename, tag):
     """
     Add a tag to an image. 
 
@@ -67,19 +68,26 @@ def addTag(filename, tag):
         filename (str): name of the image file
         tag (str): tag to add
     """
-    __library.getItem(filename).addUserTag(tag)
-    
+    __library.get_item(filename).add_user_tag(tag)
+
+
 class __MLModelMediator:
 
-    def __init__(self, face_sample_folder: str = None):
+    def __init__(self, face_sample_folder=None):
+        """
+        Initialize a ML model mediator
+
+        Args:
+            face_sample_folder (str): folder containing face samples
+        """
         self.__objectDetection = ObjectDetection('yolov5s', 0.3)
         self.__face_sample_folder = face_sample_folder
         self.__face_recognition = FaceRecognition()
         self.__face_recognition.train(self.__face_sample_folder)
-    
-    def addTags(self, images: list[ImageTag]):
+
+    def add_tags(self, images: list[ImageTag]):
         """
-        Get tags of the images using the ML model
+        Get tags of the images using the Object Detection model and the Facial Recognition model
 
         Args:
             images (list[ImageTag]): images
@@ -87,23 +95,23 @@ class __MLModelMediator:
         start = time.time()
         if len(images) == 0:
             return []
-        
+
         # Object Detection
-        obj_images = list(filter(lambda img: not img.isObjectDetected(), images))
-        obj_filepaths = [img.filepath for img in obj_images]
-        obj_pred = self.__objectDetection.detect(obj_filepaths)
+        obj_images = list(filter(lambda img: not img.is_object_detected(), images))
+        obj_file_paths = [img.filepath for img in obj_images]
+        obj_pred = self.__objectDetection.detect(obj_file_paths)
         for img, pred in zip(obj_images, obj_pred):
-            img.setObjectTags(pred)
+            img.set_object_tags(pred)
 
         print(f"addTags Object Detection runtime: {time.time() - start} seconds")
         start = time.time()
 
         # Facial Recognition
         for image in images:
-            if image.isFaceRecognized():
+            if image.is_face_recognized():
                 continue
-            faces, _ = cropFaces(image.filepath)
+            faces, _ = crop_faces(image.filepath)
             names = self.__face_recognition.predict(faces)
-            image.setFaceTags(names)
-        
+            image.set_face_tags(names)
+
         print(f"addTags Facial Recognition runtime: {time.time() - start} seconds")
