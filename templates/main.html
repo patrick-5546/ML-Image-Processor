@@ -1,15 +1,20 @@
 <html>
   <head>
+    <style>
+      body {font-family: Arial, Helvetica, sans-serif;}
+    </style>
     <title>Image Upload</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
   </head>
   <body>
     <h1>Image Upload</h1>
-    <form action="{{ url_for('upload_files') }}" class="dropzone">
-    </form>
+    <form action="{{ url_for('upload_files') }}" class="dropzone"></form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
-    <form action="/download" method="get">
+    <form action="{{ url_for('zip_and_download') }}" method="get">
       <input type="submit" value="Download photos">
+    </form>
+    <form action="{{ url_for('gallery') }}">
+      <input type="submit" value="Gallery">
     </form>
   </body>
 </html>
