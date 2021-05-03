@@ -11,8 +11,8 @@ if not os.path.exists('/tmp/instance/uploads'):
     os.mkdir('/tmp/instance/uploads')
 
 app = Flask(__name__)
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.png']
-app.config['UPLOAD_PATH'] = '/tmp'
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.JPG', '.png', '.PNG']
+app.config['UPLOAD_PATH'] = '/tmp/instance/uploads'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0 # this prevents browsers from caching the return files
 
 
@@ -65,6 +65,7 @@ def clear_gallery():
 
 
 if __name__ == "__main__":
+    # Running locally
     app.config['UPLOAD_PATH'] = 'uploads'
     shutil.rmtree('uploads', True)
     os.mkdir('uploads')
