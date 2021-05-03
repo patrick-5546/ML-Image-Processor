@@ -1,9 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
 import os
 import shutil
-import zipfile
 import tagger
 import enhancement
+
+
+if not os.path.exists('/tmp/instance'):
+    os.mkdir('/tmp/instance')
+if not os.path.exists('/tmp/instance/uploads'):
+    os.mkdir('/tmp/instance/uploads')
 
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.png']
@@ -34,20 +39,29 @@ def upload_files():
     return redirect((url_for('index')))
 
 
-@app.route('/download', methods=['GET'])
-def zip_and_download():
-    path = app.config['UPLOAD_PATH']
-    tagger.tag_all_images()
-    enhancement.enhance_images_in(path)
+@app.route('/Photos/<filename>')
+def upload(filename):
+    return send_from_directory(app.config['UPLOAD_PATH'], filename)
 
-    ziph = zipfile.ZipFile('Photos.zip', 'w', zipfile.ZIP_DEFLATED)
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            ziph.write(os.path.join(root, file),
-                       os.path.relpath(os.path.join(root, file),
-                                       os.path.join(path, '..')))
-    ziph.close()
-    return send_from_directory(directory=os.path.dirname(app.instance_path), filename="Photos.zip")
+
+@app.route('/Photos', methods=['GET'])
+def zip_and_download():
+    shutil.make_archive('/tmp/instance/uploads', 'zip', '/tmp/instance/uploads')
+    return send_from_directory('/tmp/instance', 'uploads.zip')
+
+
+@app.route('/gallery')
+def gallery():
+    files = os.listdir(app.config['UPLOAD_PATH'])
+    return render_template('gallery.html', files=files)
+
+
+@app.route('/clear')
+def clear_gallery():
+    to_remove = [f for f in os.listdir(app.config['UPLOAD_PATH'])]
+    for f in to_remove:
+        os.remove(os.path.join(app.config['UPLOAD_PATH'], f))
+    return redirect(url_for('gallery'))
 
 
 if __name__ == "__main__":
