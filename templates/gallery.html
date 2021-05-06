@@ -91,10 +91,10 @@
       }
     </style>
   </head>
-  <body>
-    <h1>Gallery</h1>
+  <body style="background-color:#202020;">
+    <h1 style="color:white">Gallery</h1>
     {% for file in files %}
-      <img class="myImages" src="{{ url_for('upload', filename=file) }}" alt="INSERT TAGS HERE" style="height:100%;max-width:1920px;max-height:240px">
+      <img class="myImages" src="{{ url_for('upload', filename=file) }}" alt="Tags here" style="height:100%;max-width:1920px;max-height:240px">
     {% endfor %}
 
     <div id="myModal" class="modal">
