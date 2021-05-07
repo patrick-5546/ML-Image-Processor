@@ -84,20 +84,21 @@ class ImageTag:
         # Convert objects tags to category tags
         final_object_tags = set()
         for detectedObject in self.__objectTags:
-            if 'portrait' not in final_object_tags and detectedObject in portrait:
-                final_object_tags.add('portrait')
-            if 'group_photo' not in final_object_tags and detectedObject in group_photo:
-                final_object_tags.add('group_photo')
-            if 'urban' not in final_object_tags and detectedObject in urban:
-                final_object_tags.add('urban')
-            if 'pet' not in final_object_tags and detectedObject in pet:
-                final_object_tags.add('pet')
-            if 'nature' not in final_object_tags and detectedObject in nature:
-                final_object_tags.add('nature')
-            if 'sports' not in final_object_tags and detectedObject in sports:
-                final_object_tags.add('sports')
-            if 'food' not in final_object_tags and detectedObject in food:
-                final_object_tags.add('food')
+            if 'Portrait' not in final_object_tags and 'Group Photo' not in final_object_tags and detectedObject in portrait:
+                final_object_tags.add('Portrait')
+            if 'Portrait' in final_object_tags and 'Group Photo' not in final_object_tags and detectedObject in group_photo:
+                final_object_tags.remove('Portrait')
+                final_object_tags.add('Group Photo')
+            if 'Urban' not in final_object_tags and detectedObject in urban:
+                final_object_tags.add('Urban')
+            if 'Pet' not in final_object_tags and detectedObject in pet:
+                final_object_tags.add('Pet')
+            if 'Nature' not in final_object_tags and detectedObject in nature:
+                final_object_tags.add('Nature')
+            if 'Sports' not in final_object_tags and detectedObject in sports:
+                final_object_tags.add('Sports')
+            if 'Food' not in final_object_tags and detectedObject in food:
+                final_object_tags.add('Food')
         
         tags = final_object_tags.union(self.__faceTags, self.__addedUserTags)
         tags = tags - self.__excludeTags
