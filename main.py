@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, abort, sen
 import os
 import shutil
 import tagger
-import enhancement
+# import enhancement
 
 
 # if not os.path.exists('/tmp/instance'):
@@ -54,10 +54,11 @@ def zip_and_download():
     else:
         return send_from_directory('tmp/instance', 'uploads.zip')
 
+
 @app.route('/gallery')
 def gallery():
     files = os.listdir(app.config['UPLOAD_PATH'])
-    return render_template('gallery.html', files=files)
+    return render_template('gallery.html', files=files, tags=tagger.get_all_tags())
 
 
 @app.route('/clear')
@@ -87,6 +88,6 @@ if __name__ == "__main__":
         os.remove(os.path.join(app.config['UPLOAD_PATH'], f))
 
     tagger.initialize(app.config['UPLOAD_PATH'], 'tagger/face_sample')
-    enhancement.init()
+    # enhancement.init()
 
     app.run(host="127.0.0.1", port=8080, debug=True)
