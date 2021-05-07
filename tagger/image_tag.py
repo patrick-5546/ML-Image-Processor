@@ -2,6 +2,7 @@ import os
 import time
 import pyexiv2
 from collections.abc import Iterable
+from tagger.categories import portrait, group_photo, urban, pet, nature, sports, food
 
 
 class ImageLibrary:
@@ -81,7 +82,27 @@ class ImageTag:
     
     def get_all_tags(self):
         tags = self.__objectTags.union(self.__faceTags, self.__addedUserTags)
-        return tags - self.__excludeTags
+        tags = tags - self.__excludeTags
+
+        # Convert objects to tags
+        final_tags = set()
+        for detectedObject in tags:
+            if 'portrait' not in final_tags and detectedObject in portrait:
+                final_tags.add('portrait')
+            if 'group_photo' not in final_tags and detectedObject in group_photo:
+                final_tags.add('group_photo')
+            if 'urban' not in final_tags and detectedObject in urban:
+                final_tags.add('urban')
+            if 'pet' not in final_tags and detectedObject in pet:
+                final_tags.add('pet')
+            if 'nature' not in final_tags and detectedObject in nature:
+                final_tags.add('nature')
+            if 'sports' not in final_tags and detectedObject in sports:
+                final_tags.add('sports')
+            if 'food' not in final_tags and detectedObject in food:
+                final_tags.add('food')
+                
+        return final_tags
     
     def exclude_tag(self, tag):
         self.__addedUserTags.discard(tag)
