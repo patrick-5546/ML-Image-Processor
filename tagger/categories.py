@@ -1,5 +1,5 @@
 '''
-Mapping objects to the tag they represent
+Mapping objects to the category tag they represent
 '''
 portrait = ['person','handbag','tie']
 group_photo = ['person','handbag','tie']
