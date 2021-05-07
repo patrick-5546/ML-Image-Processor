@@ -2,18 +2,20 @@ from flask import Flask, render_template, request, redirect, url_for, abort, sen
 import os
 import shutil
 import tagger
-import enhancement
+# import enhancement
 
 
-if not os.path.exists('/tmp/instance'):
-    os.mkdir('/tmp/instance')
-if not os.path.exists('/tmp/instance/uploads'):
-    os.mkdir('/tmp/instance/uploads')
+# if not os.path.exists('/tmp/instance'):
+#     os.mkdir('/tmp/instance')
+# if not os.path.exists('/tmp/instance/uploads'):
+#     os.mkdir('/tmp/instance/uploads')
 
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.JPG', '.png', '.PNG']
 app.config['UPLOAD_PATH'] = '/tmp/instance/uploads'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0 # this prevents browsers from caching the return files
+
+local = False
 
 
 @app.errorhandler(400)
@@ -46,14 +48,17 @@ def upload(filename):
 
 @app.route('/Photos', methods=['GET'])
 def zip_and_download():
-    shutil.make_archive('/tmp/instance/uploads', 'zip', '/tmp/instance/uploads')
-    return send_from_directory('/tmp/instance', 'uploads.zip')
+    shutil.make_archive(app.config['UPLOAD_PATH'], 'zip', app.config['UPLOAD_PATH'])
+    if not local:
+        return send_from_directory('/tmp/instance', 'uploads.zip')
+    else:
+        return send_from_directory('tmp/instance', 'uploads.zip')
 
 
 @app.route('/gallery')
 def gallery():
     files = os.listdir(app.config['UPLOAD_PATH'])
-    return render_template('gallery.html', files=files)
+    return render_template('gallery.html', files=files, tags=tagger.get_all_tags())
 
 
 @app.route('/clear')
@@ -64,13 +69,25 @@ def clear_gallery():
     return redirect(url_for('gallery'))
 
 
+@app.route('/tagger')
+def tag_photos():
+    # Tag photos
+    tagger.tag_all_images()
+    return redirect(url_for('index'))
+
+
 if __name__ == "__main__":
     # Running locally
-    app.config['UPLOAD_PATH'] = 'uploads'
+    local = True
+    app.config['UPLOAD_PATH'] = 'tmp/instance/uploads'
     shutil.rmtree('uploads', True)
     os.mkdir('uploads')
 
+    old_files = [f for f in os.listdir(app.config['UPLOAD_PATH'])]
+    for f in old_files:
+        os.remove(os.path.join(app.config['UPLOAD_PATH'], f))
+
     tagger.initialize(app.config['UPLOAD_PATH'], 'tagger/face_sample')
-    enhancement.init()
+    # enhancement.init()
 
     app.run(host="127.0.0.1", port=8080, debug=True)

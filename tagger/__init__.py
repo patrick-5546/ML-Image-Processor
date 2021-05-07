@@ -1,7 +1,6 @@
 """
 This python script tags images in the provided folder.
 """
-
 import time
 from .object_detection import ObjectDetection
 from .face_detection import crop_faces
@@ -31,6 +30,19 @@ def tag_all_images():
     __mediator.add_tags(__library.get_all_items())
     __library.save_tags()
     print(f"tag() runtime: {time.time() - start} seconds")
+
+
+def get_all_tags():
+    """
+
+    Returns:
+        dict[str, str]:
+    """
+    images = __library.images
+    tags = dict()
+    for key, val in images.items():
+        tags[key] = "; ".join(val.get_all_tags())
+    return tags
 
 
 def get_tags(filename):
