@@ -1,1 +1,10 @@
 Flask==1.1.2
+Pillow
+facenet_pytorch
+pyexiv2
+pandas
+tqdm
+PyYAML
+seaborn
+sklearn
+opencv-python
