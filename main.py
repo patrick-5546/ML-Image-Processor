@@ -4,15 +4,16 @@ import shutil
 import tagger
 # import enhancement
 
-
-# if not os.path.exists('/tmp/instance'):
-#     os.mkdir('/tmp/instance')
-# if not os.path.exists('/tmp/instance/uploads'):
-#     os.mkdir('/tmp/instance/uploads')
+if not os.path.exists('./tmp'):
+    os.mkdir('./tmp')
+if not os.path.exists('./tmp/instance'):
+    os.mkdir('./tmp/instance')
+if not os.path.exists('./tmp/instance/uploads'):
+    os.mkdir('./tmp/instance/uploads')
 
 app = Flask(__name__)
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.JPG', '.png', '.PNG']
-app.config['UPLOAD_PATH'] = '/tmp/instance/uploads'
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.JPG']
+app.config['UPLOAD_PATH'] = './tmp/instance/uploads'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0 # this prevents browsers from caching the return files
 
 local = False
