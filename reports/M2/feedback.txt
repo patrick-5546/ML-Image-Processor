@@ -1,0 +1,2 @@
+- instead of having the report sectioned by features, we would prefer if the report was sectioned by the four bullet points on Piazza (@511)
+- re 2 models: ideally you would want one unified model (since inference time would be cut in half), so one thing you could try doing is maybe training a subset of MS-COCO, or use a smaller dataset for the generic classes, like VOC Pascal
