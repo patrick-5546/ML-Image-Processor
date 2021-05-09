@@ -1,4 +1,5 @@
 uploads/
 __pycache__/
-yolov5s.pt
 tmp/
+.idea
+venv/
