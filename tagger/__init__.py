@@ -92,7 +92,7 @@ class __MLModelMediator:
         Args:
             face_sample_folder (str): folder containing face samples
         """
-        self.__objectDetection = ObjectDetection('yolov5s', 0.3)
+        self.__objectDetection = ObjectDetection(0.1)
         self.__face_sample_folder = face_sample_folder
         self.__face_recognition = FaceRecognition()
         self.__face_recognition.train(self.__face_sample_folder)

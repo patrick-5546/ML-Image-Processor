@@ -2,8 +2,8 @@ import torch
 
 
 class ObjectDetection:
-    def __init__(self, model: str = 'yolov5s', min_conf: float = 0.0):
-        self.__model = torch.hub.load('ultralytics/yolov5', model, pretrained=True, verbose=False)
+    def __init__(self, min_conf: float = 0.0):
+        self.__model = torch.hub.load('ultralytics/yolov5', 'custom', path_or_model='noface2000images.pt', verbose=False)
         self.__min_conf = min_conf
 
     def __dataset_builder(self, file_paths: list[str]) -> list[str]:
