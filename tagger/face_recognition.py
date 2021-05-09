@@ -1,5 +1,5 @@
-from sklearn.svm import SVC
 from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from .face_recognition_dataset import build_train_dataset, build_prediction_dataset
 
 
@@ -17,7 +17,7 @@ class FaceRecognition:
 
     def __build_svc(self, train_dataset, train_target):
         train_pca = self.__pca.transform(train_dataset)
-        self.__clf = SVC()
+        self.__clf = LinearDiscriminantAnalysis()
         self.__clf.fit(train_pca, train_target)
 
     def train(self, train_folder):
@@ -32,21 +32,27 @@ class FaceRecognition:
         self.__build_svc(data, target)
         self.names = names
 
-    def predict(self, faces):
+    def predict(self, faces, min_conf=0.75):
         """
         Given a list of faces, predict their names.
 
         Args:
             faces (list[Image]): the faces
+            min_conf (float): minimum confidence
 
         Returns:
-            list[str]: predicted names
+            (list[str], list[float]): predicted names and the confidence
         """
-        if len(faces) == 0:
-            return []
-
-        size = self.__sample_size
-        pred_data = build_prediction_dataset(faces, size[0], size[1])
-        pred_pca = self.__pca.transform(pred_data)
-        pred = [self.names[p] for p in self.__clf.predict(pred_pca)]
-        return pred
+        names, confs = [], []
+        if len(faces) != 0:
+            size = self.__sample_size
+            pred_data = build_prediction_dataset(faces, size[0], size[1])
+            pred_pca = self.__pca.transform(pred_data)
+            outs = self.__clf.predict(pred_pca)
+            proba = self.__clf.predict_proba(pred_pca)
+            for i, p in zip(outs, proba):
+                print(f"{self.names[i]} {p[i]}")
+                if p[i] >= min_conf:
+                    names.append(self.names[i])
+                    confs.append(p[i])
+        return names, confs

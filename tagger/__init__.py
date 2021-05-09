@@ -123,7 +123,7 @@ class __MLModelMediator:
             if image.is_face_recognized():
                 continue
             faces, _ = crop_faces(image.filepath)
-            names = self.__face_recognition.predict(faces)
+            names, confs = self.__face_recognition.predict(faces)
             image.set_face_tags(names)
 
         print(f"addTags Facial Recognition runtime: {time.time() - start} seconds")
