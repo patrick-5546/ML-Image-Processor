@@ -3,22 +3,33 @@ import torch
 
 class ObjectDetection:
     def __init__(self, min_conf: float = 0.0):
-        self.__model = torch.hub.load('ultralytics/yolov5', 'custom', path_or_model='noface2000images.pt', verbose=False)
+        self.__custom_model = torch.hub.load('ultralytics/yolov5',
+                                             'custom',
+                                             path_or_model='tagger/trained_yolo_models/noface2000images.pt',
+                                             verbose=False)
+        self.__pretrained_model = torch.hub.load('ultralytics/yolov5',
+                                                 'custom',
+                                                 path_or_model='tagger/trained_yolo_models/yolov5s.pt',
+                                                 verbose=False)
         self.__min_conf = min_conf
 
-    def __dataset_builder(self, file_paths: list[str]) -> list[str]:
-        return list(file_paths)
+    def __process_pred(self, pred, names, tags_set, log_name="pred"):
+        if pred is not None:
+            for classId, conf in zip(pred[:, -1], pred[:, -2]):
+                print(f"{log_name} label: {names[int(classId)]} conf: {conf}")
+                if conf >= self.__min_conf:
+                    tags_set.add(names[int(classId)])
 
-    def __predict(self, dataset) -> list[list[str]]:
-        output = self.__model(dataset)  # NOTE: this modifies dataset
+    def __predict(self, paths) -> list[list[str]]:
+        output_custom = self.__custom_model(list(paths))  # NOTE: the model modifies its input
+        output_pretrained = self.__pretrained_model(list(paths))  # NOTE: the model modifies its input
         results = []
-        for pred in output.pred:
+        for i in range(len(paths)):
             tags = set()
-            if pred is not None:
-                for classId, conf in zip(pred[:, -1], pred[:, -2]):
-                    # print(f"label: {output.names[int(classId)]} conf: {conf}")
-                    if conf >= self.__min_conf:
-                        tags.add(output.names[int(classId)])
+            pred_custom, pred_pretrained = output_custom.pred[i], output_pretrained.pred[i]
+            print(f"Image file: {paths[i]}")
+            self.__process_pred(pred_custom, output_custom.names, tags, "custom")
+            self.__process_pred(pred_pretrained, output_pretrained.names, tags, "pretrained")
             results.append(list(tags))
         return results
     
@@ -34,6 +45,5 @@ class ObjectDetection:
         """
         if len(file_paths) == 0:
             return []
-        dataset = self.__dataset_builder(file_paths)
-        prediction = self.__predict(dataset)
+        prediction = self.__predict(file_paths)
         return prediction
