@@ -41,7 +41,7 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 5. The gallery shows all the uploaded photos
 ![Gallery](/Images/Application%20Screenshots%20(Milestone%203)/Gallery.png)
 6. Clicking on any image expands it and shows the tag it was given from the ML model
-![Expand Image](/Images/Application%20Screenshots%20(Milestone%203)/Expand%20Image.png)
+![Expand Image](/Images/Application%20Screenshots%20(Milestone%203)/Expand%20image.png)
 7. At the bottom of the gallery, click 'Download photos' to download all the photos as a zip folder
 ![Download](/Images/Application%20Screenshots%20(Milestone%203)/Download.png)
 8. The downloaded photos will be updated with the new tags
