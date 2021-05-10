@@ -9,9 +9,11 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 ## Current State of Application
 
 - Can upload and view images - copied from [this tutorial](https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask)
-- Uploaded images stored in the directory `uploads/' when run locally (will be stored in Google Cloud 'tmp/' directory when run on the Google App Engine')
+- Uploaded images stored in the directory 'tmp/instance/uploads' when run locally (this path was created to simulate the behaviour of the app when it is run on the Google App Engine)
 - Ability to download a copy of the uploaded images as a zip folder
-![Application Screenshot](/Images/Application%20Screenshot%20(Home).png)
+- Updating the tags of an image by processing it through our custom-trained ML model
+- Viewing the uploaded images and their determined categories on our application's gallery page
+![Application Screenshot](/Images/Application%20Screenshots%20(Milestone%203)/Application.png)
 
 ## Dependencies
 - Basics
@@ -31,6 +33,16 @@ Other tools that can be implemented (time-permitting, or if facial recognition i
 
 1. Run `python main.py` to start application and open http://127.0.0.1:8080/ on your browser
 2. Click on the box to select which images to upload, or drag them to the box
-![Upload Images](/Images/Application%20Screenshot%20(Upload).png)
-3. Click 'Download photos' and select where to save the zip folder containing all the images
-![Download Images](/Images/Application%20Screenshot%20(Download).png)
+![Upload Images](/Images/Application%20Screenshots%20(Milestone%203)/Upload.png)
+3. Click on 'Tag photos' to process uploaded photos through ML model
+![Tag Photos](/Images/Application%20Screenshots%20(Milestone%203)/Tag%20Photos.png)
+4. Click on 'Gallery' to access the application's photo gallery
+![Click Gallery](/Images/Application%20Screenshots%20(Milestone%203)/Click%20gallery.png)
+5. The gallery shows all the uploaded photos
+![Gallery](/Images/Application%20Screenshots%20(Milestone%203)/Gallery.png)
+6. Clicking on any image expands it and shows the tag it was given from the ML model
+![Expand Image](/Images/Application%20Screenshots%20(Milestone%203)/Expand%20Image.png)
+7. At the bottom of the gallery, click 'Download photos' to download all the photos as a zip folder
+![Download](/Images/Application%20Screenshots%20(Milestone%203)/Download.png)
+8. The downloaded photos will be updated with the new tags
+![Downloaded Tags](/Images/Application%20Screenshots%20(Milestone%203)/Downloaded%20tags.png)
