@@ -4,13 +4,15 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 
 ## Installation
 
-1. Clone this repository
+1. Ensure that [Git](https://git-scm.com/downloads) and [Python](https://www.python.org/downloads/)>=3.9 (with pip) is installed
+
+2. Clone this repository
 
     ```sh
     git clone https://github.com/patrick-5546/ML-Image-Processor
     ```
 
-2. Navigate to the project directory and install its requirements
+3. Navigate to the project directory and install its requirements
 
     ```sh
     pip install -r requirements.txt
