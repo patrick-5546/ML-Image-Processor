@@ -2,22 +2,58 @@
   <head>
     <style>
       body {font-family: Arial, Helvetica, sans-serif;}
+      form.inline { float:left; }
+      .clearBoth { clear:both; }
     </style>
-    <title>Image Upload</title>
+    <title>ML Image Processor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
   </head>
-  <body style="background-color:#202020;">
-    <h1 style="color:white">Image Upload</h1>
-    <form action="{{ url_for('upload_files') }}" class="dropzone"></form>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
-    <form action="{{ url_for('zip_and_download') }}" method="get">
-      <input type="submit" value="Download photos">
+  <body style="background-color:#313131;">
+    <h1 style="color:rgba(255, 255, 255, 0.888)">ML Image Processor</h1>
+
+    <form class="inline" action="{{ url_for('tag_photos') }}">
+      <input type="submit" value="Tag Photos">
     </form>
-    <form action="{{ url_for('gallery') }}">
+    <form class="inline" action="{{ url_for('gallery') }}">
       <input type="submit" value="Gallery">
     </form>
-    <form action="{{ url_for('tag_photos') }}">
-      <input type="submit" value="Tag photos">
-    </form>
+    <form class="inline" action="{{ url_for('zip_and_download') }}" method="get">
+      <input type="submit" value="Download Photos">
+    </form>    
+    <br class="clearBoth" />
+
+    <form action="{{ url_for('upload_files') }}" class="dropzone"></form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+    <br class="clearBoth" />
+
+    <h2 style="color:rgba(255, 255, 255, 0.888)">Using this Application</h1>
+    <ol style="color:rgba(255, 255, 255, 0.888)">
+      <li>Click on the white box above to select which images to upload, or drag them the box</li>
+      <li>Click on the <b>Tag Photos</b> button to run the images through the following machine learning models:
+        <ol type="a">
+          <li>Object Detection: identifies common objects in an image, using them to tag the image with
+            one or more categories
+            <ul>
+              <li> Categories include: Portrait, Group Photo, Urban, Pet, Nature, Sports, Food</li>
+              <li>The objects that the models are trained to detect, and how they map to the categories,
+                are listed in <code>tagger/categories.py</code></li>
+            </ul>
+          </li>
+          <li>Face Detection: tags images with the faces it was pretrained on</li>
+          <li>Rotation Correction: detects crooked images, straightens them out, then crops out the black borders
+            that resulted from the rotation</li>
+          <li>Low-Light Enhancment: detects dark images and outputs a better-lit version
+            <ul><li><i>Experimental feature:</i> may output images with bright neon spots</li></ul>
+          </li>
+        </ol>
+      </li>
+      <li>Click on the <b>Gallery</b> button to view all the uploaded photos
+      <li>Click on an image to expand it and view and modify the tags it was given by the ML models</li>
+      </li>
+      <li>Click on the <b>Download Photos</b> button to download all the uploaded images with their new tags</li>
+    </ol>
+    <br class="clearBoth" />
+
+    <h4 style="color:rgba(255, 255, 255, 0.888)">Created by Christopher Lee, Juntong Luo, Luka Rogic, and Patrick Creighton</h1>
   </body>
 </html>
