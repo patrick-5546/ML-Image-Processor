@@ -5,11 +5,13 @@ class ObjectDetection:
     def __init__(self, min_conf: float = 0.0):
         self.__custom_model = torch.hub.load('ultralytics/yolov5',
                                              'custom',
-                                             path='ml_object_dectection/trained_yolo_models/noface2000images.pt',
+                                             path='ml_backend/ml_object_dectection/trained_yolo_models'
+                                                  '/bettertreedetector.pt',
                                              verbose=False)
         self.__pretrained_model = torch.hub.load('ultralytics/yolov5',
                                                  'custom',
-                                                 path='ml_object_dectection/trained_yolo_models/yolov5s.pt',
+                                                 path='ml_backend/ml_object_dectection/trained_yolo_models'
+                                                      '/yolov5s.pt',
                                                  verbose=False)
         self.__min_conf = min_conf
 
