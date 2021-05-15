@@ -2,6 +2,7 @@ Flask==1.1.2
 facenet_pytorch
 pyexiv2
 sklearn
+numpy
 
 ## From yolov5
 # base
