@@ -31,8 +31,10 @@
       .modal-content {
         margin: auto;
         display: block;
-        width: 100%;
-        max-width: 1080px;
+        width: auto;
+        height: auto;
+        max-width: 1280px;
+        max-height: 720px;
       }
 
       /* Caption of Modal Image */
@@ -83,6 +85,23 @@
         cursor: pointer;
       }
 
+      /* Edit Tags Button */
+      .edit {
+        position: absolute;
+        bottom: 125px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 20px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+      .edit:hover,
+      .edit:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
       /* 100% Image Width on Smaller Screens */
       @media only screen and (max-width: 700px){
         .modal-content {
@@ -94,7 +113,7 @@
   <body style="background-color:#202020;">
     <h1 style="color:white">Gallery</h1>
     {% for file in files %}
-      <img class="myImages" src="{{ url_for('upload', filename=file) }}" alt="{{ tags[file] }}" style="height:100%;max-width:1920px;max-height:240px">
+      <img class="myImages" title="{{ file }}" src="{{ url_for('upload', filename=file) }}" alt="{{ tags[file] }}" style="height:100%;max-width:1920px;max-height:240px">
     {% endfor %}
 
     <div id="myModal" class="modal">
@@ -102,6 +121,7 @@
       <span class="delete">Delete</span>
       <img class="modal-content" id="img01">
       <div id="caption"></div>
+      <a class="edit" onclick="editTags()">Edit Tags</a>
     </div>
 
     <script>
@@ -120,6 +140,7 @@
         img.onclick = function(evt) {
           console.log(evt);
           modal.style.display = "block";
+          modalImg.title = this.title
           modalImg.src = this.src;
           captionText.innerHTML = this.alt;
         }
@@ -131,6 +152,10 @@
       // When the user clicks on <span> (x), close the modal
       close.onclick = function() {
         modal.style.display = "none";
+      }
+
+      function editTags() {
+        window.location.href = "{{ url_for('edit_tags', filename='file_temp') }}".replace("file_temp", modalImg.title);
       }
     </script>
 

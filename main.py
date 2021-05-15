@@ -69,6 +69,41 @@ def clear_gallery():
         os.remove(os.path.join(app.config['UPLOAD_PATH'], f))
     return redirect(url_for('gallery'))
 
+@app.route('/tags/<filename>', methods=['GET'])
+def edit_tags(filename):
+    all_tags = tagger.get_all_tags()
+    if filename in all_tags:
+        tags = all_tags[filename]
+    else:
+        tags = ""
+    return render_template('tag.html', file=filename, tags=tags)
+
+
+@app.route('/tagging/<filename>', methods=['POST'])
+def update_tags(filename):
+    all_tags = tagger.get_all_tags()
+    if filename in all_tags:
+        old_tags_str = all_tags[filename]
+    else:
+        old_tags_str = ""
+    old_tags = old_tags_str.split("; ")
+
+    form_data = request.form
+    new_tags_str = ""
+    for _, value in form_data.items():
+        new_tags_str = value
+    new_tags = new_tags_str.split("; ")
+
+    for old_tag in old_tags:
+        if old_tag not in new_tags:
+            tagger.exclude_tag(filename, old_tag)
+    for new_tag in new_tags:
+        if new_tag not in old_tags:
+            tagger.add_tag(filename, new_tag)
+            print("Adding " + new_tag)
+
+    return redirect(url_for('gallery'))
+
 
 @app.route('/tagger')
 def tag_photos():
