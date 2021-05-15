@@ -11,7 +11,6 @@
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
-        background: #70bg32;
         background-repeat:no-repeat;
         background: -webkit-linear-gradient( to left top, #101010, #313131);
         background: -moz-linear-gradient( to left top, #101010, #313131);
@@ -26,9 +25,6 @@
   <body>
     <h1 style="color:rgba(255, 255, 255, 0.888)">ML Image Processor</h1>
 
-    <form class="inline" action="{{ url_for('tag_photos') }}">
-      <input type="submit" value="Tag Photos">
-    </form>
     <form class="inline" action="{{ url_for('gallery') }}">
       <input type="submit" value="Gallery">
     </form>
@@ -41,20 +37,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
     <br class="clearBoth" />
 
+    <h2 style="color:rgba(255, 255, 255, 0.888)">Feature Toggles</h2>
+    <form action="{{ url_for('tag_photos') }}" style="color:rgba(255, 255, 255, 0.888)">
+      <input type="checkbox" name="object" value="1" checked>
+      <scan >Category Tags</scan><br>
+      <input type="checkbox" name="face" value="2" checked>
+      <scan >People Tags</scan><br>
+      <input type="checkbox" name="rotation" value="3" checked>
+      <scan>Rotation Correction</scan><br>
+      <input type="checkbox" name="low_light" value="4">
+      <scan>Low-Light Enhancement</scan><br>
+      <p> </p>
+      <input type="submit" value="Run Features">
+    </form>
+    <p style="color:rgba(255, 255, 255, 0.888)"><b>Status:</b> ___</p>
+    <br class="clearBoth" />
+
     <h2 style="color:rgba(255, 255, 255, 0.888)">Using this Application</h2>
     <ol style="color:rgba(255, 255, 255, 0.888)">
       <li>Click on the white box above to select which images to upload, or drag them the box</li>
-      <li>Click on the <b>Tag Photos</b> button to run the images through the following machine learning models:
+      <li>Click on the <b>Run Features</b> button to run the images through the selected features,
+        out of the following:
         <ol type="a">
-          <li>Object Detection: identifies common objects in an image, using them to tag the image with
-            one or more categories
+          <li>Category Tags: identifies common objects in an image and uses them to tag the image with one or more categories
             <ul>
               <li> Categories include: Portrait, Group Photo, Urban, Pet, Nature, Sports, Food</li>
               <li>The objects that the models are trained to detect, and how they map to the categories,
                 are listed in <code>tagger/categories.py</code></li>
             </ul>
           </li>
-          <li>Face Detection: tags images with the faces it was pretrained on</li>
+          <li>People Tags: tags images with the faces it was pretrained on</li>
           <li>Rotation Correction: detects crooked images, straightens them out, then crops out the black borders
             that resulted from the rotation</li>
           <li>Low-Light Enhancement: detects dark images and outputs a better-lit version

@@ -4,11 +4,11 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 
 ## Features
 
-1. **Object Detection:** identifies common objects in an image, using them to tag the image with one or more categories
+1. **Catgegory Tags:** identifies common objects in an image, using them to tag the image with one or more categories
      - Categories include: Portrait, Group Photo, Urban, Pet, Nature, Sports, Food
      - The objects that the models are trained to detect, and how they map to the categories, are listed in `tagger/categories.py`
 
-2. **Face Detection:** tags images with the faces it was pretrained on
+2. **People Tags:** tags images with the faces it was pretrained on
 
 3. **Rotation Correction:** detects crooked images, straightens them out, then crops out the black borders that resulted from the rotation
 
