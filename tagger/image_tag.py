@@ -86,6 +86,7 @@ class ImageTag:
         for detectedObject in self.__objectTags:
             if 'Portrait' not in final_object_tags and 'Group Photo' not in final_object_tags and detectedObject in portrait:
                 final_object_tags.add('Portrait')
+                continue
             if 'Portrait' in final_object_tags and 'Group Photo' not in final_object_tags and detectedObject in group_photo:
                 final_object_tags.remove('Portrait')
                 final_object_tags.add('Group Photo')
