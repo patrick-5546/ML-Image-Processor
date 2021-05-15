@@ -57,11 +57,14 @@ class RotationCorrection:
         angles = self.__predict_angles(dataset)
         return angles
 
-    def correct_rotation(self, source_image_paths, target_images_paths):
+    def correct_rotation(self, source_image_paths, target_images_paths, minimum_angle=2):
         angles = self.find_angles(source_image_paths)
         for source, target, angle in zip(source_image_paths, target_images_paths, angles):
             image_array = cv2.imread(source)
-            fixed_image = rotate_and_crop(image_array, -angle)
+            if abs(angle) > minimum_angle:
+                fixed_image = rotate_and_crop(image_array, -angle)
+            else:
+                fixed_image = numpy_to_pil_img(image_array)
             fixed_image.save(target)
             print(f"Rotation: src: {source}, target: {target}, angle: {angle}")
 

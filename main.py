@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
 import os
 import shutil
-import tagger
+from tagger import Tagger
 # import enhancement
 
 if not os.path.exists('./tmp'):
@@ -14,9 +14,10 @@ if not os.path.exists('./tmp/instance/uploads'):
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.JPG']
 app.config['UPLOAD_PATH'] = './tmp/instance/uploads'
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0 # this prevents browsers from caching the return files
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  # this prevents browsers from caching the return files
 
 local = False
+tagger = Tagger(app.config['UPLOAD_PATH'], 'Test Photos/face_sample')
 
 
 @app.errorhandler(400)
@@ -73,6 +74,7 @@ def clear_gallery():
         os.remove(os.path.join(app.config['UPLOAD_PATH'], f))
     return redirect(url_for('gallery'))
 
+
 @app.route('/tags/<filename>', methods=['GET'])
 def edit_tags(filename):
     all_tags = tagger.get_all_tags()
@@ -127,7 +129,6 @@ if __name__ == "__main__":
     for f in old_files:
         os.remove(os.path.join(app.config['UPLOAD_PATH'], f))
 
-    tagger.initialize(app.config['UPLOAD_PATH'], 'tagger/face_sample')
     # enhancement.init()
 
     app.run(host="127.0.0.1", port=8080, debug=True)

@@ -1,12 +1,12 @@
 # The blocks below were mostly copied from the sklearn code base
 # (https://github.com/scikit-learn/scikit-learn/blob/95119c13a/sklearn/datasets/_lfw.py)
 
+import numpy as np
 from os import listdir
 from os.path import join, isdir
 from PIL import Image
 from sklearn.utils import Bunch
 from ._pilutil import imread, imresize, fromimage
-import numpy as np
 
 
 def build_train_dataset(train_folder: str):
