@@ -4,12 +4,29 @@
     <style>
       body {font-family: Arial, Helvetica, sans-serif;}
 
+      html {
+        min-height: 100%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        background: #70bg32;
+        background-repeat:no-repeat;
+        background: -webkit-linear-gradient( to left top, #101010, #313131);
+        background: -moz-linear-gradient( to left top, #101010, #313131);
+        background: -ms-linear-gradient( to left top, #101010, #313131);
+        background: -o-linear-gradient( to left top, #101010, #313131);
+        background: linear-gradient( to left top, #101010, #313131);
+      }
+
+      form.inline { float:left; }
+      .clearBoth { clear:both; }
+
       #myImg {
         border-radius: 5px;
         cursor: pointer;
         transition: 0.3s;
       }
-
       #myImg: hover {opacity: 0.7;}
 
       /* The Modal (background) */
@@ -110,15 +127,15 @@
       }
     </style>
   </head>
-  <body style="background-color:#202020;">
+  <body>
     <h1 style="color:white">Gallery</h1>
     {% for file in files %}
       <img class="myImages" title="{{ file }}" src="{{ url_for('upload', filename=file) }}" alt="{{ tags[file] }}" style="height:100%;max-width:1920px;max-height:240px">
     {% endfor %}
+    <br><br>
 
     <div id="myModal" class="modal">
       <span class="close">&times;</span>
-      <span class="delete">Delete</span>
       <img class="modal-content" id="img01">
       <div id="caption"></div>
       <a class="edit" onclick="editTags()">Edit Tags</a>
@@ -159,14 +176,12 @@
       }
     </script>
 
-    <form action="{{ url_for('zip_and_download') }}" method="get">
-      <input type="submit" value="Download photos">
-    </form>
-    <form action="/clear">
-      <input type="submit" value="Delete all">
-    </form>
-    <form action="/" method="get">
+    <form class="inline" action="/" method="get">
       <input type="submit" value="Back">
     </form>
+    <form class="inline" action="{{ url_for('zip_and_download') }}" method="get">
+      <input type="submit" value="Download photos">
+    </form>
+    <br class="clearBoth" />
   </body>
 </html>

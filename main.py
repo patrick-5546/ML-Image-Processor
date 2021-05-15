@@ -59,6 +59,10 @@ def zip_and_download():
 @app.route('/gallery')
 def gallery():
     files = os.listdir(app.config['UPLOAD_PATH'])
+    if len(files) == 0:
+        return render_template('empty_gallery.html')
+    elif len(files) > 20:
+        return render_template('large_gallery.html', files=files, tags=tagger.get_all_tags())
     return render_template('gallery.html', files=files, tags=tagger.get_all_tags())
 
 

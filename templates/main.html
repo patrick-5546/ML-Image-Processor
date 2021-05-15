@@ -4,11 +4,26 @@
       body {font-family: Arial, Helvetica, sans-serif;}
       form.inline { float:left; }
       .clearBoth { clear:both; }
+
+      html {
+        min-height: 100%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        background: #70bg32;
+        background-repeat:no-repeat;
+        background: -webkit-linear-gradient( to left top, #101010, #313131);
+        background: -moz-linear-gradient( to left top, #101010, #313131);
+        background: -ms-linear-gradient( to left top, #101010, #313131);
+        background: -o-linear-gradient( to left top, #101010, #313131);
+        background: linear-gradient( to left top, #101010, #313131);
+      }
     </style>
     <title>ML Image Processor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
   </head>
-  <body style="background-color:#313131;">
+  <body>
     <h1 style="color:rgba(255, 255, 255, 0.888)">ML Image Processor</h1>
 
     <form class="inline" action="{{ url_for('tag_photos') }}">
@@ -26,7 +41,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
     <br class="clearBoth" />
 
-    <h2 style="color:rgba(255, 255, 255, 0.888)">Using this Application</h1>
+    <h2 style="color:rgba(255, 255, 255, 0.888)">Using this Application</h2>
     <ol style="color:rgba(255, 255, 255, 0.888)">
       <li>Click on the white box above to select which images to upload, or drag them the box</li>
       <li>Click on the <b>Tag Photos</b> button to run the images through the following machine learning models:
@@ -54,6 +69,6 @@
     </ol>
     <br class="clearBoth" />
 
-    <h4 style="color:rgba(255, 255, 255, 0.888)">Created by Christopher Lee, Juntong Luo, Luka Rogic, and Patrick Creighton</h1>
+    <h4 style="color:rgba(255, 255, 255, 0.888)">Created by Christopher Lee, Juntong Luo, Luka Rogic, and Patrick Creighton</h4>
   </body>
 </html>
