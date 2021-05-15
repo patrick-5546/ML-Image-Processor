@@ -2,8 +2,8 @@
 Mapping objects to the category tag they represent
 """
 
-portrait = ['person', 'handbag', 'tie']
-group_photo = ['person', 'handbag', 'tie']
+portrait = ['person']
+group_photo = ['person']
 urban = ['skyscraper', 'car', 'motorcycle', 'bus', 'truck', 'traffic light', 'fire hydrant', 'stop sign',
          'parking meter', 'bench']
 pet = ['cat', 'dog']

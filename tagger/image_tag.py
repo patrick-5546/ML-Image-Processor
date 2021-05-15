@@ -73,7 +73,7 @@ class ImageTag:
             face_tags (Iterable[str]):
         """
         self.filepath = filepath
-        self.__objectTags = set(object_tags) if object_tags else set()
+        self.__objectTags = list(object_tags) if object_tags else list()
         self.__faceTags = set(face_tags) if face_tags else set()
         self.__excludeTags = set()
         self.__addedUserTags = set()
@@ -83,6 +83,7 @@ class ImageTag:
     def get_all_tags(self):
         # Convert objects tags to category tags
         final_object_tags = set()
+        print(f"name: {self.filepath} tags: {self.__objectTags}")
         for detectedObject in self.__objectTags:
             if 'Portrait' not in final_object_tags and 'Group Photo' not in final_object_tags and detectedObject in portrait:
                 final_object_tags.add('Portrait')
@@ -116,11 +117,11 @@ class ImageTag:
     
     def set_object_tags(self, tags):
         print(f"setting object tags: {tags}")
-        self.__objectTags = set(tags)
+        self.__objectTags = list(tags)
         self.__objectDetected = True
 
     def clear_object_tags(self):
-        self.__objectTags = set()
+        self.__objectTags = list()
         self.__objectDetected = False
     
     def set_face_tags(self, tags):
@@ -148,7 +149,7 @@ def tag_image(filepath, new_tags):
     """
     tag_entries = ['Xmp.dc.subject', 'Iptc.Application2.Keywords']  # Exif.Image.XPKeywords is not supported
 
-    print(f'Image: {filepath}, adding tags: {new_tags}')
+    # print(f'Image: {filepath}, adding tags: {new_tags}')
     img = pyexiv2.Image(filepath)
     read = {'Xmp': img.read_xmp, 'Iptc': img.read_iptc, 'Exif': img.read_exif}
     modify = {'Xmp': img.modify_xmp, 'Iptc': img.modify_iptc, 'Exif': img.modify_exif}
