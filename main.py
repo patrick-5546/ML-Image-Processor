@@ -50,6 +50,7 @@ def upload(filename):
 
 @app.route('/Photos', methods=['GET'])
 def zip_and_download():
+    tagger.save_tags()
     shutil.make_archive(app.config['UPLOAD_PATH'], 'zip', app.config['UPLOAD_PATH'])
     if not local:
         return send_from_directory('/tmp/instance', 'uploads.zip')

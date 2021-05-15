@@ -29,8 +29,11 @@ class Tagger:
         self.__library.scan()
         items = self.__library.get_all_items()
         self.__mediator.add_tags(items)
-        self.__library.save_tags()
+        self.save_tags()
         print(f"tag() runtime: {time.time() - start} seconds")
+
+    def save_tags(self):
+        self.__library.save_tags()
 
     def get_all_tags(self):
         """
