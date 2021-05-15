@@ -12,23 +12,27 @@ class Tagger:
 
     def __init__(self, working_dir, face_sample_folder):
         """
-            Initializes the image tagger
+        Initializes the image tagger
 
-            Args:
-                working_dir (str): path of the image folder
-                face_sample_folder (str): path of the folder containing labeled face images
-            """
+        Args:
+            working_dir (str): path of the image folder
+            face_sample_folder (str): path of the folder containing labeled face images
+        """
         self.__mediator = MLModelMediator(face_sample_folder)
         self.__library = ImageLibrary(working_dir)
 
-    def tag_all_images(self):
+    def tag_all_images(self, object_ml, face_ml):
         """
         Tags all images in the working directory. Requires the tagger to be initialized.
+
+        Args:
+            object_ml (bool): run object detection
+            face_ml (bool): run face detection and recognition
         """
         start = time.time()
         self.__library.scan()
         items = self.__library.get_all_items()
-        self.__mediator.add_tags(items)
+        self.__mediator.add_tags(items, object_ml, face_ml)
         self.save_tags()
         print(f"tag() runtime: {time.time() - start} seconds")
 
@@ -121,15 +125,19 @@ class MLModelMediator:
 
         print(f"addTags Facial Recognition runtime: {time.time() - start} seconds")
 
-    def add_tags(self, images: list[ImageTag]):
+    def add_tags(self, images, object_ml=True, face_ml=True):
         """
         Get tags of the images using the Object Detection model and the Facial Recognition model
 
         Args:
             images (list[ImageTag]): images
+            object_ml (bool): run object detection
+            face_ml (bool): run face detection and recognition
         """
 
         if len(images) == 0:
             return []
-        self.__set_object_tags(images)
-        self.__set_face_tags(images)
+        if object_ml:
+            self.__set_object_tags(images)
+        if face_ml:
+            self.__set_face_tags(images)

@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, abort, sen
 import os
 import shutil
 from tagger import Tagger
-# import enhancement
+from ml_backend.ml_rotation import RotationCorrection
+from ml_backend.ml_low_light import LowLightEnhancement
 
 if not os.path.exists('./tmp'):
     os.mkdir('./tmp')
@@ -18,6 +19,8 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  # this prevents browsers from cachi
 
 local = False
 tagger = Tagger(app.config['UPLOAD_PATH'], 'Test_Photos/face_sample')
+low_light = LowLightEnhancement()
+rc = RotationCorrection()
 
 
 @app.errorhandler(400)
@@ -115,7 +118,13 @@ def update_tags(filename):
 @app.route('/tagger')
 def tag_photos():
     # Tag photos
-    tagger.tag_all_images()
+    options = dict(request.args).keys()
+    print(options)
+    tagger.tag_all_images("object" in options, "face" in options)
+    if "rotation" in options:
+        rc.correct_rotation_in(app.config['UPLOAD_PATH'])
+    if "low_light" in options:
+        low_light.enhance_images_in(app.config['UPLOAD_PATH'])
     return redirect(url_for('index'))
 
 
@@ -123,13 +132,11 @@ if __name__ == "__main__":
     # Running locally
     local = True
     app.config['UPLOAD_PATH'] = 'tmp/instance/uploads'
-    shutil.rmtree('uploads', True)
-    os.mkdir('uploads')
+    shutil.rmtree(app.config['UPLOAD_PATH'], True)
+    os.mkdir(app.config['UPLOAD_PATH'])
 
     old_files = [f for f in os.listdir(app.config['UPLOAD_PATH'])]
     for f in old_files:
         os.remove(os.path.join(app.config['UPLOAD_PATH'], f))
-
-    # enhancement.init()
 
     app.run(host="127.0.0.1", port=8080, debug=True)

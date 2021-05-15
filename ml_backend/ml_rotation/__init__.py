@@ -8,8 +8,11 @@ rc.correct_rotation(["t.jpg", "rotated.jpg"], ["tf.jpg", "a.jpg"])
 import cv2
 import torch
 import torchvision
+import time
+import pathlib
+import os
 from torch.utils.data import Dataset, DataLoader
-from helper import rotate_and_crop, numpy_to_pil_img
+from .helper import rotate_and_crop, numpy_to_pil_img
 
 
 class RotationCorrection:
@@ -36,7 +39,7 @@ class RotationCorrection:
             return self.__transform(image)
 
     def __init__(self):
-        self.model = torch.load("saved_rotation_model", map_location=torch.device('cpu'))
+        self.model = torch.load("ml_backend/ml_rotation/saved_rotation_model", map_location=torch.device('cpu'))
         self.model.eval()
 
     def __load_dataset(self, image_paths):
@@ -57,17 +60,27 @@ class RotationCorrection:
         angles = self.__predict_angles(dataset)
         return angles
 
-    def correct_rotation(self, source_image_paths, target_images_paths, minimum_angle=2):
+    def correct_rotation(self, source_image_paths, target_images_paths, minimum_angle):
         angles = self.find_angles(source_image_paths)
         for source, target, angle in zip(source_image_paths, target_images_paths, angles):
             image_array = cv2.imread(source)
             if abs(angle) > minimum_angle:
-                fixed_image = rotate_and_crop(image_array, -angle)
+                rotate_and_crop(image_array, -angle).save(target)
+                print(f"Rotation: src: {source}, target: {target}, angle: {angle}")
             else:
-                fixed_image = numpy_to_pil_img(image_array)
-            fixed_image.save(target)
-            print(f"Rotation: src: {source}, target: {target}, angle: {angle}")
+                print(f"Rotation: src: {source}, angle: {angle}, skipped")
 
+    def correct_rotation_in(self, folder, minimum_angle=2):
+        start = time.time()
+        enhanced_folder = folder + "/correct_rotation/"
+        pathlib.Path(enhanced_folder).mkdir(parents=True, exist_ok=True)
+        files = os.listdir(folder)
+        files = list(filter(lambda n: n.endswith(('.jpeg', '.jpg', '.png')), files))
 
-rc = RotationCorrection()
-rc.correct_rotation(["t.jpg", "rotated.jpg"], ["tf.jpg", "a.jpg"])
+        source = [f"{folder}/{fn}" for fn in files]
+        target = [f"{enhanced_folder}/{fn}" for fn in files]
+        print(f"correct_rotation_in src: {source}, tar: {target}")
+
+        self.correct_rotation(source, target, minimum_angle)
+
+        print(f"correct_rotation_in runtime: {time.time() - start} seconds")
