@@ -2,9 +2,9 @@
 This python script tags images in the provided folder.
 """
 import time
-from ml_object_dectection import ObjectDetection
-from ml_face.face_detection import FaceDetection
-from ml_face.face_recognition import FaceRecognition
+from ml_backend.ml_object_dectection import ObjectDetection
+from ml_backend.ml_face.face_detection import FaceDetection
+from ml_backend.ml_face.face_recognition import FaceRecognition
 from .image_tag import ImageLibrary, ImageTag
 
 
