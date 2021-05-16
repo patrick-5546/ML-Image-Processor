@@ -2,6 +2,10 @@
 
 Jupyter notebooks runnable on [Google Colab](https://research.google.com/colaboratory/faq.html)
 
+***Token used to clone this repository into the notebooks are now deprecated, replace with the HTTPS URL***
+
+- Use `https://github.com/patrick-5546/ML-Image-Processor.git` instead of `https://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@github.com/patrick-5546/ML-Image-Processor.git`
+
 ## Dataset Sources
 
 ### Face Recognition Notebook
