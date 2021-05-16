@@ -79,7 +79,7 @@ def rotate_image(image, angle):
     return result
 
 
-def rotated_square_with_max_area(w, h, angle):
+def rotated_rect_with_max_area(w, h, angle):
     """
     Given a rectangle of size wxh that has been rotated by 'angle' (in
     radians), computes the width and height of the largest possible
@@ -142,7 +142,7 @@ def rotate_and_crop(img, angle):
     then converts it to a PIL image
     """
     w, h = img.shape[1], img.shape[0]
-    w, h = rotated_square_with_max_area(w, h, math.radians(angle))
+    w, h = rotated_rect_with_max_area(w, h, math.radians(angle))
     rotated = rotate_image(img, angle)
 
     rotated_and_cropped_img = crop_around_center(rotated, w, h)
