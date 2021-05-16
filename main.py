@@ -146,7 +146,9 @@ if __name__ == "__main__":
     local = True
     app.config['UPLOAD_PATH'] = 'tmp/instance/uploads'
     shutil.rmtree(app.config['UPLOAD_PATH'], True)
+    shutil.rmtree("tmp/instance/crop_face_log/", True)
     os.mkdir(app.config['UPLOAD_PATH'])
+    os.mkdir("tmp/instance/crop_face_log/")
 
     old_files = [f for f in os.listdir(app.config['UPLOAD_PATH'])]
     for f in old_files:

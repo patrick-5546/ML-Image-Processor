@@ -35,7 +35,7 @@ class FaceDetection:
         if len(cropped_faces) > 0:
             print(f"CropFaces found {len(cropped_faces)} face(s) in \"{img_path}\"")
         if len(cropped_faces) > 0:
-            save_images(cropped_faces, "Crop Faces Log/" + img_path.split('/')[-1])
+            save_images(cropped_faces, "tmp/instance/crop_face_log/" + img_path.split('/')[-1])
         return cropped_faces, confs
 
 
