@@ -152,6 +152,7 @@ def tag_image(filepath, new_tags):
     # print(f'Image: {filepath}, adding tags: {new_tags}')
     img = pyexiv2.Image(filepath)
     read = {'Xmp': img.read_xmp, 'Iptc': img.read_iptc, 'Exif': img.read_exif}
+    clear = {'Xmp': img.clear_xmp, 'Iptc': img.clear_iptc, 'Exif': img.clear_exif}
     modify = {'Xmp': img.modify_xmp, 'Iptc': img.modify_iptc, 'Exif': img.modify_exif}
 
     for entry in tag_entries:
@@ -161,4 +162,5 @@ def tag_image(filepath, new_tags):
         if entry in metadata:
             tags.update(metadata[entry])
         metadata[entry] = list(tags)
+        clear[entry_type]()
         modify[entry_type](metadata)
