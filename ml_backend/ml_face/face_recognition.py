@@ -1,6 +1,6 @@
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from .face_recognition_dataset import build_train_dataset, build_prediction_dataset
+from ._face_recognition_dataset import build_train_dataset, build_prediction_dataset
 
 
 class FaceRecognition:
