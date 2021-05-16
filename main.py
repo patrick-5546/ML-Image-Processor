@@ -19,7 +19,7 @@ app.config['UPLOAD_PATH'] = './tmp/instance/uploads'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  # this prevents browsers from caching the return files
 
 local = False
-tagger = Tagger(app.config['UPLOAD_PATH'], 'Test_Photos/face_sample')
+tagger = Tagger(app.config['UPLOAD_PATH'], 'ml_backend/ml_face/face_sample')
 low_light = LowLightEnhancement()
 rc = RotationCorrection()
 options = []
