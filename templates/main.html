@@ -40,13 +40,22 @@
     <h2 style="color:rgba(255, 255, 255, 0.888)">Feature Toggles</h2>
     <form action="{{ url_for('tag_loading') }}" style="color:rgba(255, 255, 255, 0.888)">
       <input type="checkbox" name="object" value="1" checked>
-      <scan >Category Tags</scan><br>
-      <input type="checkbox" name="face" value="2" checked>
-      <scan >People Tags</scan><br>
+      <scan>Category Tags</scan><br>
+      <input type="checkbox" name="face" value="2">
+      <scan>Name Tags</scan><br>
+      <ul>
+        <li><b>Manual setup required:</b> model trained on the headshots given in <code>tmp/faces</code></li>
+        <ul>
+          <li>Each person's headshots should go in a separate directory named with that person's name</li>
+          <li>For accurate results, have at least 7 headshots per person to distinguish between 5 people, or 14
+            headshots per person for 10 people</li>
+          <li>Example of compatible formatting can be found in <code>tmp/faces</code></li>
+        </ul>
+      </ul>
       <input type="checkbox" name="rotation" value="3" checked>
       <scan>Rotation Correction</scan><br>
       <input type="checkbox" name="low_light" value="4">
-      <scan>Low-Light Enhancement <i>(Experimental)</i></scan><br>
+      <scan>Low-Light Enhancement <i>(Beta)</i></scan><br>
       <p> </p>
       <input type="submit" value="Run Features">
     </form>
@@ -58,18 +67,17 @@
       <li>Click on the <b>Run Features</b> button to run the images through the selected features,
         out of the following:
         <ol type="a">
-          <li>Category Tags: identifies common objects in an image and uses them to tag the image with one or more categories
+          <li><b>Category Tags:</b> identifies common objects in an image and uses them to tag the image with one or more categories
             <ul>
               <li> Categories include: Portrait, Group Photo, Urban, Pet, Nature, Sports, Food</li>
               <li>The objects that the models are trained to detect, and how they map to the categories,
                 are listed in <code>tagger/categories.py</code></li>
             </ul>
           </li>
-          <li>People Tags: tags images with the faces it was pretrained on</li>
-          <li>Rotation Correction: detects crooked images, straightens them out, then crops out the black borders
-            that resulted from the rotation</li>
-          <li>Low-Light Enhancement: detects dark images and outputs a better-lit version
-            <ul><li><i>Experimental feature:</i> may output images with bright neon spots</li></ul>
+          <li><b>Name Tags:</b> identifies people in an image and tags the image with their names</li>
+          <li><b>Rotation Correction:</b> detects crooked images and straightens them out</li>
+          <li><b>Low-Light Enhancement:</b> detects dark images and outputs a better-lit version
+            <ul><li><i>Beta feature:</i> may output images with bright neon spots</li></ul>
           </li>
         </ol>
       </li>
