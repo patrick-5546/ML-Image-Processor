@@ -4,6 +4,7 @@ import shutil
 from tagger import Tagger
 from ml_backend.ml_rotation import RotationCorrection
 from ml_backend.ml_low_light import LowLightEnhancement
+from PIL import Image
 
 if not os.path.exists('./tmp'):
     os.mkdir('./tmp')
@@ -13,7 +14,7 @@ if not os.path.exists('./tmp/instance/uploads'):
     os.mkdir('./tmp/instance/uploads')
 
 app = Flask(__name__)
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.JPG']
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.jpeg', '.JPG', '.png', '.PNG']
 app.config['UPLOAD_PATH'] = './tmp/instance/uploads'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  # this prevents browsers from caching the return files
 
@@ -41,6 +42,11 @@ def upload_files():
     extensions = tuple(app.config['UPLOAD_EXTENSIONS'])
     if uploaded_file.filename != '' and uploaded_file.filename.endswith(extensions):
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename))
+        if uploaded_file.filename.endswith(tuple(['.png', '.PNG'])):
+            im = Image.open(os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename))
+            rgb_im = im.convert('RGB')
+            rgb_im.save(os.path.join(app.config['UPLOAD_PATH'], os.path.splitext(uploaded_file.filename)[0] + ".jpg"))
+            os.remove(os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename))
     elif not uploaded_file.filename.endswith(extensions):
         print(uploaded_file.filename + " was not image file!")
         abort(400)
