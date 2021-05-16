@@ -21,6 +21,7 @@ local = False
 tagger = Tagger(app.config['UPLOAD_PATH'], 'Test_Photos/face_sample')
 low_light = LowLightEnhancement()
 rc = RotationCorrection()
+options = []
 
 
 @app.errorhandler(400)
@@ -116,10 +117,16 @@ def update_tags(filename):
 
 
 @app.route('/tagger')
+def tag_loading():
+    global options
+    options = dict(request.args).keys()
+    return render_template('loading.html')
+
+
+@app.route('/tag_loaded')
 def tag_photos():
     # Tag photos
-    options = dict(request.args).keys()
-    print(options)
+    print("Models selected: " + ", ".join(options))
     tagger.tag_all_images("object" in options, "face" in options)
     if "rotation" in options:
         rc.correct_rotation_in(app.config['UPLOAD_PATH'])

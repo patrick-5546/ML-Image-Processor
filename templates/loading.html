@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <style>
+      body {font-family: Arial, Helvetica, sans-serif;}
+      form.inline { float:left; }
+      .clearBoth { clear:both; }
+
+      html {
+        min-height: 100%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        background: #70bg32;
+        background-repeat:no-repeat;
+        background: -webkit-linear-gradient( to left top, #101010, #313131);
+        background: -moz-linear-gradient( to left top, #101010, #313131);
+        background: -ms-linear-gradient( to left top, #101010, #313131);
+        background: -o-linear-gradient( to left top, #101010, #313131);
+        background: linear-gradient( to left top, #101010, #313131);
+      }
+
+      .loader {
+        border: 16px solid rgba(255, 255, 255, 0.888); /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    <title>Loading...</title>
+  </head>
+  <body onload="start_page()">
+    <script type="text/javascript">
+      function start_page() {
+        window.location.href = "{{ url_for('tag_photos') }}";
+      }
+    </script>
+
+    <br><br><br><br><br><br><br>
+    <h1 style="color:rgba(255, 255, 255, 0.888);text-align:center">Processing Images...</h1>
+    <br><br>
+    <div class="loader" style="display:block;margin:auto"></div>
+  </body>
+</html>
