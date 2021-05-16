@@ -8,7 +8,7 @@ The process of organizing photos can be a huge pain. And when they aren't organi
      - Categories include: Portrait, Group Photo, Urban, Pet, Nature, Sports, Food
      - The objects that the models are trained to detect, and how they map to the categories, are listed in `tagger/categories.py`
 
-2. **People Tags:** tags images with the faces it was pretrained on
+2. **Name Tags:** identifies people in an image and tags the image with their names
 
 3. **Rotation Correction:** detects crooked images, straightens them out, then crops out the black borders that resulted from the rotation
 
