@@ -47,6 +47,11 @@ def upload_files():
             rgb_im = im.convert('RGB')
             rgb_im.save(os.path.join(app.config['UPLOAD_PATH'], os.path.splitext(uploaded_file.filename)[0] + ".jpg"))
             os.remove(os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename))
+        elif uploaded_file.filename.endswith(tuple(['.JPG', '.jpeg', '.JPEG'])):
+            old_name = os.path.join(app.config['UPLOAD_PATH'], uploaded_file.filename)
+            new_name = os.path.join(app.config['UPLOAD_PATH'], os.path.splitext(uploaded_file.filename)[0] + ".jpg")
+            print("Renaming " + old_name + " to " + new_name)
+            os.rename(old_name, new_name)
     elif not uploaded_file.filename.endswith(extensions):
         print(uploaded_file.filename + " was not image file!")
         abort(400)
