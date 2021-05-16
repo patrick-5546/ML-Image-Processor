@@ -70,7 +70,9 @@ def zip_and_download():
 
 @app.route('/gallery')
 def gallery():
-    files = os.listdir(app.config['UPLOAD_PATH'])
+    path = app.config['UPLOAD_PATH']
+    files = os.listdir(path)
+    files = list(filter(lambda f: not os.path.isdir(f"{path}/{f}"), files))
     if len(files) == 0:
         return render_template('empty_gallery.html')
     elif len(files) > 20:
