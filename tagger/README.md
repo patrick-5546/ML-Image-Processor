@@ -1,20 +1,21 @@
 # Image Tagger
 
-The package contains methods to tag images based on the output of the pretrained YOLOv5s model and sklearn's facial recognition model. The added tags are included during indexing in both Windows and iOS, which means the images can be found by searching their tags.
+The package contains methods to tag images based on the output of 
+the pretrained YOLOv5s model and sklearn's facial recognition model.
+The added tags are included during indexing in both Windows and iOS, 
+which means the images can be found by searching their tags.
+`Metadata for Tags.pdf` contains some information related to 
+the compatibility of different metadata fields for tagging.
 
-## How to Test
+### Samples
 
-```python
-import tagger
-tagger.initialize('path/to/image_folder', 'path/to/labeled_face_image_folder')
-tagger.tag()
-```
+- Some samples are included in `images_before` and `images_after`.
+
 
 ### Sources
 
 #### Images
 
-- Images in `face_sample` are extracted from the [Labeled Faces in the Wild](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_lfw_people.html) dataset.
 - Images in `images_before`:
   - Images named `imageX.jpg` are downloaded from [Pixabay](https://pixabay.com/) for demonstration purposes.
   - `Powell.jpg` by [David](https://www.flickr.com/photos/bootbearwdc/2311921844)
@@ -23,19 +24,3 @@ tagger.tag()
   - `Agassi.jpg` by [Shinya Suzuki](https://www.flickr.com/photos/shinyasuzuki/6182777961/)
   - `Toledo.jpg` by [San Francisco Foghorn](https://www.flickr.com/photos/sffoghorn/16533059473/)
 - Images in `images_after` are tagged by this application
-
-#### Code
-
-- `face_recognition.py` is written based on `Face_Recognition.ipynb`
-
-- Code in `face_recognition_dataset.py` is copied from `Face_Recognition.ipynb`
-
-### Output
-
-- Some samples are included in `Backend/images_before` and `Backend/images_after`
-
-- Before running `tagall.py`\
-![before running tagall.py](/Screenshots/tagall_before.jpg)
-
-- After running `tagall.py`\
-![after running tagall.py](/Screenshots/tagall_after.jpg)
