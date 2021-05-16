@@ -1,12 +1,13 @@
 # ml_face
 
-The package contains methods to detect and identify faces in images. 
+The package contains methods to detect and identify faces in images.
 Detected faces are saved in `tmp/instance/crop_face_log/`. The face recognition
-model is trained based on faces in `face_sample`.
+model is trained based on faces in `face_sample/`.
 
 ## ML Models
-- facenet_pytorch model for face detection
-- scikit-learn Linear Discriminant Analysis for face recognition
+
+- Pretrained facenet_pytorch model for face detection
+- scikit-learn SVM with a Linear Discriminant Analysis classifier for face recognition
 
 ## Sources
 
@@ -16,7 +17,7 @@ model is trained based on faces in `face_sample`.
 
 ### Code
 
-- `face_recognition.py` and `_face_recognition_dataset.py` is written based on `ML_Development/Face_Recognition.ipynb`
+- `face_recognition.py` and `_face_recognition_dataset.py` is written based on [`/ML_Development/Face_Recognition.ipynb`](/ML_Development/Face_Recognition.ipynb)
 - [`_pilutil.py`](https://github.com/scikit-learn/scikit-learn/blob/95119c13a/sklearn/datasets/_lfw.py)
   - Used in making the dataset for the face recognition model
 

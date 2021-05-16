@@ -12,7 +12,7 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 
 3. **Rotation Correction:** detects crooked images and straightens them out
 
-4. **Low-Light Enhancement:** detects dark images and outputs a better-lit version
+4. **Low-Light Enhancement:** detects dark images and brightens them
      - *Beta feature:* may output images with bright neon spots
 
 ## Video Presentation

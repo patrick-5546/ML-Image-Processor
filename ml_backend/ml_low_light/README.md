@@ -1,19 +1,17 @@
 # ml_low_light
 
-The package contains methods to enhance dark images. 
-A filter is applied to filter out bright images before
-processing images. 
+The package contains methods to enhance dark images. A filter is applied to ensure that the model only runs on dark images.
 
 ## ML Model
 
-- Keras InceptionResNetV2
+- Keras InceptionResNetV2 model
 
 ## Sources
 
 ### Saved Model
 
-- The saved model in `saved_lle_model` is obtained from the notebook 
-  `ML_Development/Low_Light_Image_Enhancement.ipynb`.
+- The saved model in `saved_lle_model` is obtained from the notebook
+  [`/ML_Development/Low_Light_Image_Enhancement.ipynb`](/ML_Development/Low_Light_Image_Enhancement.ipynb`).
 
 ## Example
 

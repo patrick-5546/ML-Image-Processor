@@ -1,7 +1,6 @@
 # ml_rotation
 
-The package contains methods to predict 
-the degree of misalignment of images and straighten the images.
+The package contains methods to predict the degree of misalignment of images.
 
 ## ML Models
 
@@ -11,8 +10,8 @@ the degree of misalignment of images and straighten the images.
 
 ### Code
 
-- `__init__.py` is written based on `ML_Development/Rotation_Correction.ipynb`
-- Code in `helper.py` are copied from `ML_Development/Rotation_Correction.ipynb`. It is for cropping and rotating images. 
+- `__init__.py` is written based on [`/ML_Development/Rotation_Correction.ipynb`](/ML_Development/Rotation_Correction.ipynb)
+- Code in `helper.py` are copied from [`/ML_Development/Rotation_Correction.ipynb`](/ML_Development/Rotation_Correction.ipynb). It is for cropping and rotating images.
 
 ## Example
 
