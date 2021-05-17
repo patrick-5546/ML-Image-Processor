@@ -38,4 +38,4 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 ## How to Run
 
 1. Run `python main.py` to start application and open <http://127.0.0.1:8080/> on your browser
-2. Application usage instructions can be found on the homepage, or a visual walkthrough in the [final report](/reports/final/)
+2. Application usage instructions can be found on the homepage, or a visual walkthrough in the [final report](/reports/final/Final%20Report.pdf)
