@@ -17,7 +17,7 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 
 ## Video Presentation
 
-[![Video presentation](http://img.youtube.com/vi/aSfruMMddzw/0.jpg)](http://www.youtube.com/watch?v=aSfruMMddzw "ML Image Processor")
+[![Video presentation](http://img.youtube.com/vi/aSfruMMddzw/maxresdefault.jpg)](http://www.youtube.com/watch?v=aSfruMMddzw "ML Image Processor")
 
 ## Installation
 
