@@ -10,7 +10,7 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 
 2. **Name Tags:** identifies people in an image and tags the image with their names
 
-3. **Rotation Correction:** detects crooked images and straightens them out
+3. **Rotation Correction:** detects crooked images and straightens them
 
 4. **Low-Light Enhancement:** detects dark images and brightens them
      - *Beta feature:* may output images with bright neon spots
@@ -21,25 +21,21 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 
 ## Installation
 
-1. Ensure that [Python](https://www.python.org/downloads/)>=3.9 (with pip) is installed and [Git](https://git-scm.com/downloads) if you want to clone this repository
+1. Ensure that [Python](https://www.python.org/downloads/)>=3.9 (with pip) is installed
 
 2. Download the application
 
     - To get only the files required to run the application, download and unzip a [Release](https://github.com/patrick-5546/ML-Image-Processor/releases)
-    - To clone the repository (much larger, includes reports, datasets, notebooks, etc.):
+    - To also get the reports, datasets, notebooks, etc., clone the repository (much larger folder):
 
-        ```sh
-        git clone https://github.com/patrick-5546/ML-Image-Processor
-        ```
-
-3. Create a virtual environment to run the application in (optional)
+3. Create a virtual environment to run the application in (optional, but recommended)
     1. Navigate to the project directory
     2. See [Python Docs](https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments)
          - For the first command, use `venv` as the directory name instead of `tutorial-env`
          - If using PowerShell, run the `Activate.ps1` script instead
-    - Ensures that the correct packages and versions necessary to run the application are used without adding to or replacing packages in the main python package director
+    - This ensures that the packages necessary to run the application are used without adding to or replacing packages in the main python package directory
 
-4. In the project directory, install its requirements
+4. In the project directory, install the required packages
 
     ```sh
     pip install -r requirements.txt
@@ -47,5 +43,6 @@ The process of organizing photos can be a huge pain. And when they aren't organi
 
 ## How to Run
 
-1. Run `python main.py` to start application and open <http://127.0.0.1:8080/> on your browser
-2. Application usage instructions can be found on the homepage, or a visual walkthrough in the [final report](/reports/final/Final%20Report.pdf)
+1. Run `python main.py` to start application
+2. Access application at <http://127.0.0.1:8080/>
+3. Application usage instructions can be found on the homepage, and a visual walkthrough in the [final report](/reports/final/Final%20Report.pdf)
